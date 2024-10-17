@@ -1,13 +1,13 @@
 "use server";
-import {ConnectDb} from "@/db/dbConfig";
+import { ConnectDb } from "@/db/dbConfig";
 import User from "@/models/userModel";
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db/prismaDb";
-import {GetDataFromTokken} from "../../../../../helpers/getDataFromTokken";
-import {ProductImage, product} from "@/../types/index";
-import {ObjectId} from "mongoose";
-import {cookies} from "next/headers";
-import {LISTORDERNEW1} from "../../../../../types/index";
+import { GetDataFromTokken } from "../../../../../helpers/getDataFromTokken";
+import { ProductImage, product } from "@/../types/index";
+import { ObjectId } from "mongoose";
+import { cookies } from "next/headers";
+import { LISTORDERNEW1 } from "../../../../../types/index";
 
 interface ADDRESS {
   location: string;
@@ -45,10 +45,10 @@ interface USER {
 }
 export const POST = async (req: NextRequest) => {
   try {
-ConnectDb();
+    ConnectDb();
 
     const reqBody = await req.json();
-    const {productId, productTitle, productCount, productColor} = reqBody;
+    const { productId, productTitle, productCount, productColor } = reqBody;
     console.log(productId);
     console.log(productCount);
 
@@ -70,7 +70,7 @@ ConnectDb();
       // get user from tokken cookie
       const userID = await GetDataFromTokken(req);
       console.log(userID);
-      const user = await User.findOne({_id: userID}).select("-password");
+      const user = await User.findOne({ _id: userID }).select("-password");
 
       console.log(user);
       console.log(productCount);
@@ -214,26 +214,26 @@ ConnectDb();
     } else {
       // وقتی که کسی بخواد نفوذ کنه
       return NextResponse.json(
-        {error: "اطلاعات هم خوانی ندارد"},
-        {status: 500}
+        { error: "اطلاعات هم خوانی ندارد" },
+        { status: 500 }
       );
     }
   } catch (error: any) {
-    return NextResponse.json({error: error.mrssage}, {status: 500});
+    return NextResponse.json({ error: error.mrssage }, { status: 500 });
   }
 };
 
 // get
 export const GET = async (req: NextRequest) => {
   try {
-    console.log("object");
+    console.log("object list");
     // const reqBody = await req.json();
 
     // get user from tokken cookie
     const userID = await GetDataFromTokken(req);
     console.log("object");
     console.log(userID);
-    const user = await User.findOne({_id: userID}).select("-password");
+    const user = await User.findOne({ _id: userID }).select("-password");
 
     console.log(user);
 
@@ -243,6 +243,6 @@ export const GET = async (req: NextRequest) => {
       data: user.listordershop,
     });
   } catch (error: any) {
-    return NextResponse.json({error: error.mrssage}, {status: 500});
+    return NextResponse.json({ error: error.mrssage }, { status: 500 });
   }
 };

@@ -9,7 +9,7 @@ import { PrismaClient } from "@prisma/client";
 const perPage = 5;
 
 export async function getData(currentPage: number) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const [recordsCount, result] = await prisma.$transaction([
     prisma.products.count({}),
     prisma.products.findMany({

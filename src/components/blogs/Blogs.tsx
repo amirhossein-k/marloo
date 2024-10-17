@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Blogs = ({ item }: { item: Item }) => {
-  const button = document.querySelector("#box");
+  // const button = document.querySelector("#box");
 
   return (
     <div

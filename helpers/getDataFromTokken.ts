@@ -1,6 +1,6 @@
-import jwt, {JwtPayload} from "jsonwebtoken";
-import {ObjectId} from "mongoose";
-import {NextRequest} from "next/server";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { ObjectId } from "mongoose";
+import { NextRequest } from "next/server";
 
 interface Tokken {
   id: ObjectId;
@@ -26,7 +26,7 @@ interface Tokken {
 export const GetDataFromTokken = async (req: NextRequest) => {
   try {
     const tokken = req.cookies.get("tokken")?.value || "";
-    console.log(tokken);
+    console.log(tokken, "token");
 
     // console.log("ttttttttt", tokken.body);
     const decodedTokken: Tokken | JwtPayload = jwt.verify(
@@ -36,11 +36,11 @@ export const GetDataFromTokken = async (req: NextRequest) => {
 
     return decodedTokken.id;
   } catch (err: any) {
-    console.log("err");
+    console.log("err auth get tokken");
     throw new Error(err.message);
   }
 };
-export const GetDataFromTokkenWithTokken = async (Gettokken:string) => {
+export const GetDataFromTokkenWithTokken = async (Gettokken: string) => {
   try {
     const tokken = Gettokken || "";
     console.log(tokken);
