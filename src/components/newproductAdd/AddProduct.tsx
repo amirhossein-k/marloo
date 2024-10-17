@@ -11,56 +11,7 @@ import { useMachine, normalizeProps } from "@zag-js/react";
 
 import allbrand from "../../../utils/allBrand.json";
 import Upload from "../uploads/Upload";
-const formSchema = z.object({
-  name: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
 
-  title: z
-    .string({ required_error: "title is required" })
-    .min(2, { message: "title must be more than 10 characters" })
-    .max(150, { message: "title must be less than 150 characters" })
-    .trim(),
-
-  price: z
-    .string({ required_error: "price is required" })
-    .refine((val) => val !== "uncategorised", {
-      message: "Choose category other than uncategorised",
-    }),
-  classs: z.optional(z.any()),
-  class2: z.optional(z.any()),
-  price_offer: z.optional(z.any()),
-
-  category: z
-    .string({ required_error: "Category is required" })
-    .refine((val) => val !== "uncategorised", {
-      message: "Choose category other than uncategorised",
-    }),
-
-  status: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
-  counts: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
-  category_product: z.array(z.string()),
-  colors: z.array(z.string()),
-  property: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
-  model: z.array(z.string()),
-  product_image: z.array(z.any()),
-  tags: z.array(z.string()),
-  defaultImage: z.string({ required_error: "defaultImage is required" }),
-});
 // type FormSchema = z.infer<typeof formSchema>;
 
 const AddProduct = () => {
@@ -143,18 +94,18 @@ const AddProduct = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // console.log("ff");
+    console.log("submit");
     try {
-      const parsedFormValue = formSchema.safeParse(formData);
+      const parsedFormValue = formData;
 
-      if (!parsedFormValue.success) {
-        const err = parsedFormValue.error.format().category;
+      // if (!parsedFormValue.success) {
+      //   const err = parsedFormValue.error.format().category;
 
-        alert("error");
-        return;
-      }
+      //   alert("error");
+      //   return;
+      // }
 
-      const login = axios.post("/api/product", parsedFormValue.data);
+      const login = axios.post("/api/product", parsedFormValue);
       console.log(login);
     } catch (error) {
       console.log("caught error");
@@ -198,7 +149,7 @@ const AddProduct = () => {
     <form
       className="w-full p-4  bg-pink-400"
       // action={(e) => addNewOrder(e)}
-      onSubmit={(e) => handleSubmit(e)}
+      onSubmit={(e: any) => handleSubmit(e)}
     >
       <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
         {/* image */}
