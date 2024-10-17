@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/db/prismaDb";
 
 export default async function getCategoryMain() {
