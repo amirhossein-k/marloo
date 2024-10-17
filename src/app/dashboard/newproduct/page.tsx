@@ -9,7 +9,8 @@ const page = () => {
       {/* <AddProduct>
         <div className="">fff</div>
       </AddProduct> */}
-      <AddProduct />
+      ghth
+      {/* <AddProduct /> */}
     </div>
     // <AddProduct/>
   );
