@@ -74,7 +74,24 @@ const AddProduct = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
 
-  const [formData, setFormData] = useState({
+  const fromItem = [
+    { id: "", title: "name" },
+    { id: "", title: "title" },
+    { id: "", title: "price" },
+    { id: "", title: "classs" },
+    { id: "", title: "class2" },
+    { id: "", title: "price_offer" },
+    { id: "", title: "category" },
+    { id: "", title: "counts" },
+    // { id: "", title: "category_product" },
+    // { id: "", title: "colors" },
+    { id: "", title: "property" },
+    // { id: "", title: "model" },
+    // { id: "", title: "product_image" },
+    // { id: "", title: "tags" },
+  ];
+
+  const [formData, setFormData] = useState<z.infer<typeof formSchema>>({
     name: "",
     title: "",
     price: "0",
@@ -130,20 +147,30 @@ const AddProduct = () => {
     event: string[] | undefined,
     title: string
   ) => {
+    console.log(event);
+
     setFormData((prev) => ({
       ...prev,
       [title]: event,
     }));
   };
 
-  //   const [formError, setFormError] = useState
-  //  (null);
+  const [formError, setFormError] = useState<z.ZodFormattedError<
+    FormSchema,
+    string
+  > | null>(null);
   const [touchedInput, setTouchedInput] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   const parsedData = formSchema.safeParse(formData);
+  useEffect(() => {
+    const parsedData = formSchema.safeParse(formData);
+    if (!parsedData.success) {
+      const err = parsedData.error.format();
 
-  // }, [formData]);
+      setFormError(err);
+    } else {
+      setFormError(null);
+    }
+  }, [formData]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -160,7 +187,7 @@ const AddProduct = () => {
 
       const login = axios.post("/api/product", parsedFormValue.data);
       console.log(login);
-    } catch (error: any) {
+    } catch (error) {
       console.log("caught error");
       //handle additional erros ...
     }
@@ -187,7 +214,7 @@ const AddProduct = () => {
       },
       onValueChange(details) {
         if (details)
-          setFormData((prev: any) => ({
+          setFormData((prev) => ({
             ...prev,
             ["model"]: details.value,
           }));
@@ -207,13 +234,13 @@ const AddProduct = () => {
       <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
         {/* image */}
         <div className="w-[100%]  flex justify-center">
-          <Upload
-            defaultImage={defaultImage}
-            setDefaultImage={setDefaultImage}
-            uploadedFiles={uploadedFiles}
-            setUploadedFiles={setUploadedFiles}
-            setFormData={setFormData}
-          />
+          {/* <Upload
+              defaultImage={defaultImage}
+              setDefaultImage={setDefaultImage}
+              uploadedFiles={uploadedFiles}
+              setUploadedFiles={setUploadedFiles}
+              setFormData={setFormData}
+            /> */}
         </div>
         {/*  */}
         {/*title */}
@@ -295,44 +322,41 @@ const AddProduct = () => {
         </div>
         {/* model  */}
         <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center ">
-          {/* {apiModel && (
-              <div
-                {...apiModel.getRootProps()}
-                className="bg-gray-50 rounded-md flex flex-row-reverse gap-2 flex-wrap"
-              >
-                {apiModel.value.map((value, index) => (
-                  <span
-                    key={index}
-                    {...apiModel.getItemProps({ index, value })}
+          {apiModel && (
+            <div
+              {...apiModel.getRootProps()}
+              className="bg-gray-50 rounded-md flex flex-row-reverse gap-2 flex-wrap"
+            >
+              {apiModel.value.map((value, index) => (
+                <span key={index} {...apiModel.getItemProps({ index, value })}>
+                  <div
+                    {...apiModel.getItemPreviewProps({ index, value })}
+                    className="bg-green-200 flex flex-row rounded-md gap-2"
                   >
-                    <div
-                      {...apiModel.getItemPreviewProps({ index, value })}
-                      className="bg-green-200 flex flex-row rounded-md gap-2"
+                    <button
+                      className="bg-green-200 rounded-tl-md rounded-bl-md py-[1px] px-1"
+                      {...apiModel.getItemDeleteTriggerProps({
+                        index,
+                        value,
+                      })}
                     >
-                      <button
-                        className="bg-green-200 rounded-tl-md rounded-bl-md py-[1px] px-1"
-                        {...apiModel.getItemDeleteTriggerProps({
-                          index,
-                          value,
-                        })}
-                      >
-                        &#x2715;
-                      </button>
-                      <span className="bg-green-200 py-[3px]  rounded-tr-md rounded-br-md w-full h-full flex flex-row">
-                        {value}{" "}
-                      </span>
-                    </div>
-                    <input {...apiModel.getItemInputProps({ index, value })} />
-                  </span>
-                ))}
-                <input
-                  placeholder="مدل ..."
-                  {...apiModel.getInputProps()}
-                  className="inline w-full"
-                  dir="rtl"
-                />
-              </div>
-            )} */}
+                      &#x2715;
+                    </button>
+                    <span className="bg-green-200 py-[3px]  rounded-tr-md rounded-br-md w-full h-full flex flex-row">
+                      {value}{" "}
+                    </span>
+                  </div>
+                  <input {...apiModel.getItemInputProps({ index, value })} />
+                </span>
+              ))}
+              <input
+                placeholder="مدل ..."
+                {...apiModel.getInputProps()}
+                className="inline w-full"
+                dir="rtl"
+              />
+            </div>
+          )}
         </div>
 
         {/*  */}
