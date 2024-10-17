@@ -63,196 +63,161 @@ const formSchema = z.object({
 });
 type FormSchema = z.infer<typeof formSchema>;
 
-const AddProduct = () =>
-  // { children }: { children: React.ReactNode }
-  {
-    // const inputRef = useRef("");
+const AddProduct = () => {
+  const [value, setValue] = useState<string>("react");
+  var tagproductt = ["xiamomi", "samsung", "new", "offer", "iphone"];
+  const [selectedTag, setSelectedTag] = useState(tagproductt);
+  const [defaultImage, setDefaultImage] = useState<string>("");
 
-    // const addNewOrder = async (e: any) => {
-    //   console.log(inputRef.current);
-    //   // alert('hi')
-    // };
-    const [value, setValue] = useState<string>("react");
-    var tagproductt = ["xiamomi", "samsung", "new", "offer", "iphone"];
-    const [selectedTag, setSelectedTag] = useState(tagproductt);
-    const [defaultImage, setDefaultImage] = useState<string>("");
+  var catproductt = ["اسپرت", "مردانه", "زنانه", "کودکانه", "فانتزی"];
+  const [selectedCat, setSelectedCat] = useState(catproductt);
 
-    var catproductt = ["اسپرت", "مردانه", "زنانه", "کودکانه", "فانتزی"];
-    const [selectedCat, setSelectedCat] = useState(catproductt);
+  const [uploadedFiles, setUploadedFiles] = useState<any>([]);
 
-    const [uploadedFiles, setUploadedFiles] = useState<any>([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    title: "",
+    price: "0",
+    classs: "",
+    class2: "",
+    price_offer: "",
+    status: "",
+    category: "",
+    counts: "",
+    category_product: [],
+    colors: [],
+    property: "",
+    model: [],
+    product_image: [],
+    defaultImage: "",
+    tags: selectedTag,
+  });
+  const [acctive, setActive] = useState("");
 
-    const fromItem = [
-      { id: "", title: "name" },
-      { id: "", title: "title" },
-      { id: "", title: "price" },
-      { id: "", title: "classs" },
-      { id: "", title: "class2" },
-      { id: "", title: "price_offer" },
-      { id: "", title: "category" },
-      { id: "", title: "counts" },
-      // { id: "", title: "category_product" },
-      // { id: "", title: "colors" },
-      { id: "", title: "property" },
-      // { id: "", title: "model" },
-      // { id: "", title: "product_image" },
-      // { id: "", title: "tags" },
-    ];
+  const handleInputChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    if (!touchedInput.includes(event.target.name)) {
+      setTouchedInput([...touchedInput, event.target.name]);
+    }
 
-    const [formData, setFormData] = useState<z.infer<typeof formSchema>>({
-      name: "",
-      title: "",
-      price: "0",
-      classs: "",
-      class2: "",
-      price_offer: "",
-      status: "",
-      category: "",
-      counts: "",
-      category_product: [],
-      colors: [],
-      property: "",
-      model: [],
-      product_image: [],
-      defaultImage: "",
-      tags: selectedTag,
-    });
-    const [acctive, setActive] = useState("");
-
-    const handleInputChange = (
-      event: React.ChangeEvent<
-        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >
-    ) => {
-      if (!touchedInput.includes(event.target.name)) {
-        setTouchedInput([...touchedInput, event.target.name]);
+    if (event.target.type === "checkbox") {
+      if (event.target && event.target instanceof HTMLInputElement) {
+        setFormData({
+          ...formData,
+          [event.target.name]: event.target.checked,
+        });
       }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      setActive(event.target.name);
+    }
+  };
 
-      if (event.target.type === "checkbox") {
-        if (event.target && event.target instanceof HTMLInputElement) {
-          setFormData({
-            ...formData,
-            [event.target.name]: event.target.checked,
-          });
-        }
-      } else {
-        setFormData((prev) => ({
-          ...prev,
-          [event.target.name]: event.target.value,
-        }));
-        setActive(event.target.name);
-      }
-    };
-
-    const handleSelector = (event: string | undefined, title: string) => {
-      if (event)
-        setFormData((prev) => ({
-          ...prev,
-          [title]: event,
-        }));
-    };
-    const handleInputChangeColor = (
-      event: string[] | undefined,
-      title: string
-    ) => {
-      console.log(event);
-
+  const handleSelector = (event: string | undefined, title: string) => {
+    if (event)
       setFormData((prev) => ({
         ...prev,
         [title]: event,
       }));
-    };
+  };
+  const handleInputChangeColor = (
+    event: string[] | undefined,
+    title: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [title]: event,
+    }));
+  };
 
-    const [formError, setFormError] = useState<z.ZodFormattedError<
-      FormSchema,
-      string
-    > | null>(null);
-    const [touchedInput, setTouchedInput] = useState<string[]>([]);
+  //   const [formError, setFormError] = useState
+  //  (null);
+  const [touchedInput, setTouchedInput] = useState<string[]>([]);
 
-    useEffect(() => {
-      const parsedData = formSchema.safeParse(formData);
-      if (!parsedData.success) {
-        const err = parsedData.error.format();
+  // useEffect(() => {
+  //   const parsedData = formSchema.safeParse(formData);
 
-        setFormError(err);
-      } else {
-        setFormError(null);
+  // }, [formData]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    // console.log("ff");
+    try {
+      const parsedFormValue = formSchema.safeParse(formData);
+
+      if (!parsedFormValue.success) {
+        const err = parsedFormValue.error.format().category;
+
+        alert("error");
+        return;
       }
-    }, [formData]);
 
-    const handleSubmit = async (e: FormEvent) => {
-      e.preventDefault();
-      // console.log("ff");
-      try {
-        const parsedFormValue = formSchema.safeParse(formData);
-
-        if (!parsedFormValue.success) {
-          const err = parsedFormValue.error.format().category;
-
-          alert("error");
-          return;
-        }
-
-        const login = axios.post("/api/product", parsedFormValue.data);
-        console.log(login);
-      } catch (error) {
-        console.log("caught error");
-        //handle additional erros ...
-      }
-    };
-
-    const [selectedColor, setSelectedColor] = useState([]);
-
-    var brand: string[] = [];
-    for (let i = 0; i < allbrand.length; i++) {
-      brand.push(allbrand[i].name);
+      const login = axios.post("/api/product", parsedFormValue.data);
+      console.log(login);
+    } catch (error: any) {
+      console.log("caught error");
+      //handle additional erros ...
     }
-    const [selectedModel, send] = useMachine(
-      tagsInput.machine({
-        id: "1",
-        value: [],
-        validate(details) {
-          var valid = brand;
-          return (
-            !details.value.includes(details.inputValue) &&
-            details.inputValue.includes(
-              valid.filter((item) => item === details.inputValue)[0]
-            )
-          );
-        },
-        onValueChange(details) {
-          if (details)
-            setFormData((prev) => ({
-              ...prev,
-              ["model"]: details.value,
-            }));
-        },
-      })
-    );
-    const apiModel = tagsInput.connect(selectedModel, send, normalizeProps);
-    // console.log(selectedModel.context.value, "state");
+  };
 
-    return (
-      // <>
-      <form
-        className="w-full p-4  bg-pink-400"
-        // action={(e) => addNewOrder(e)}
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
-          {/* image */}
-          <div className="w-[100%]  flex justify-center">
-            <Upload
-              defaultImage={defaultImage}
-              setDefaultImage={setDefaultImage}
-              uploadedFiles={uploadedFiles}
-              setUploadedFiles={setUploadedFiles}
-              setFormData={setFormData}
-            />
-          </div>
-          {/*  */}
-          {/*title */}
-          {/* {fromItem.map((item) => {
+  const [selectedColor, setSelectedColor] = useState([]);
+
+  var brand: string[] = [];
+  for (let i = 0; i < allbrand.length; i++) {
+    brand.push(allbrand[i].name);
+  }
+  const [selectedModel, send] = useMachine(
+    tagsInput.machine({
+      id: "1",
+      value: [],
+      validate(details) {
+        var valid = brand;
+        return (
+          !details.value.includes(details.inputValue) &&
+          details.inputValue.includes(
+            valid.filter((item) => item === details.inputValue)[0]
+          )
+        );
+      },
+      onValueChange(details) {
+        if (details)
+          setFormData((prev: any) => ({
+            ...prev,
+            ["model"]: details.value,
+          }));
+      },
+    })
+  );
+  const apiModel = tagsInput.connect(selectedModel, send, normalizeProps);
+  // console.log(selectedModel.context.value, "state");
+
+  return (
+    // <>
+    <form
+      className="w-full p-4  bg-pink-400"
+      // action={(e) => addNewOrder(e)}
+      onSubmit={(e) => handleSubmit(e)}
+    >
+      <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
+        {/* image */}
+        <div className="w-[100%]  flex justify-center">
+          <Upload
+            defaultImage={defaultImage}
+            setDefaultImage={setDefaultImage}
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+            setFormData={setFormData}
+          />
+        </div>
+        {/*  */}
+        {/*title */}
+        {/* {fromItem.map((item) => {
             return (
               <div key={item.title} className="w-[100%] md:w-[40%] lg:w-[30%]">
                 <label className=" block" htmlFor={item.title}>
@@ -273,22 +238,22 @@ const AddProduct = () =>
             );
           })} */}
 
-          {/* {children} */}
-          <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
-            <Select
-              className=" overflow-hidden"
-              style={{ minWidth: "100px" }}
-              label="وضعیت محصول"
-              value={value}
-              onChange={(event) => handleSelector(event, "status")}
-              // onChange={(val: any) => setValue(val)}
-              name="status"
-            >
-              <Option value="approved">موجود</Option>
-            </Select>
-          </div>
-          <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
-            {/* <Select
+        {/* {children} */}
+        <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
+          <Select
+            className=" overflow-hidden"
+            style={{ minWidth: "100px" }}
+            label="وضعیت محصول"
+            value={value}
+            onChange={(event) => handleSelector(event, "status")}
+            // onChange={(val: any) => setValue(val)}
+            name="status"
+          >
+            <Option value="approved">موجود</Option>
+          </Select>
+        </div>
+        <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
+          {/* <Select
               className=" overflow-hidden"
               style={{ minWidth: "100px" }}
               label="دسته بندی محصول"
@@ -303,34 +268,34 @@ const AddProduct = () =>
               <Option value="sport">اسپرت</Option>
               <Option value="fantezi">فانتزی</Option>
             </Select> */}
-            <TagsInput
-              value={selectedCat}
-              onChange={(event) =>
-                handleInputChangeColor(event, "category_product")
-              }
-              name="category_product"
-              placeHolder="دسته بندی محصول"
-            />
-          </div>
-          <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
-            <TagsInput
-              value={selectedColor}
-              onChange={(event) => handleInputChangeColor(event, "colors")}
-              name="color"
-              placeHolder="رنگ های محصول "
-            />
-          </div>
-          <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
-            <TagsInput
-              value={selectedTag}
-              onChange={(event) => handleInputChangeColor(event, "tags")}
-              name="tags"
-              placeHolder="تگ محصول"
-            />
-          </div>
-          {/* model  */}
-          <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center ">
-            {/* {apiModel && (
+          <TagsInput
+            value={selectedCat}
+            onChange={(event) =>
+              handleInputChangeColor(event, "category_product")
+            }
+            name="category_product"
+            placeHolder="دسته بندی محصول"
+          />
+        </div>
+        <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
+          <TagsInput
+            value={selectedColor}
+            onChange={(event) => handleInputChangeColor(event, "colors")}
+            name="color"
+            placeHolder="رنگ های محصول "
+          />
+        </div>
+        <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
+          <TagsInput
+            value={selectedTag}
+            onChange={(event) => handleInputChangeColor(event, "tags")}
+            name="tags"
+            placeHolder="تگ محصول"
+          />
+        </div>
+        {/* model  */}
+        <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center ">
+          {/* {apiModel && (
               <div
                 {...apiModel.getRootProps()}
                 className="bg-gray-50 rounded-md flex flex-row-reverse gap-2 flex-wrap"
@@ -368,19 +333,19 @@ const AddProduct = () =>
                 />
               </div>
             )} */}
-          </div>
-
-          {/*  */}
-
-          {/*  */}
         </div>
-        <div className="flex justify-end">
-          <button className=" bg-blue-500 hover:scale-95 transition-all duration-75 ease-in px-5 py-2 rounded-md text-white">
-            Add New Product
-          </button>
-        </div>
-      </form>
-    );
-  };
+
+        {/*  */}
+
+        {/*  */}
+      </div>
+      <div className="flex justify-end">
+        <button className=" bg-blue-500 hover:scale-95 transition-all duration-75 ease-in px-5 py-2 rounded-md text-white">
+          Add New Product
+        </button>
+      </div>
+    </form>
+  );
+};
 
 export default AddProduct;
