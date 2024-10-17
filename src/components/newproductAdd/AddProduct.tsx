@@ -4,7 +4,7 @@ import React, { useRef, FormEvent, useEffect, useState } from "react";
 import { Select, Option } from "@material-tailwind/react";
 import { TagsInput } from "react-tag-input-component-2";
 import { z } from "zod";
-import { tree } from "next/dist/build/templates/app-page";
+// import { tree } from "next/dist/build/templates/app-page";
 import axios from "axios";
 import * as tagsInput from "@zag-js/tags-input";
 import { useMachine, normalizeProps } from "@zag-js/react";
@@ -61,7 +61,7 @@ const formSchema = z.object({
   tags: z.array(z.string()),
   defaultImage: z.string({ required_error: "defaultImage is required" }),
 });
-type FormSchema = z.infer<typeof formSchema>;
+// type FormSchema = z.infer<typeof formSchema>;
 
 const AddProduct = () => {
   const [value, setValue] = useState<string>("react");
@@ -74,24 +74,7 @@ const AddProduct = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
 
-  const fromItem = [
-    { id: "", title: "name" },
-    { id: "", title: "title" },
-    { id: "", title: "price" },
-    { id: "", title: "classs" },
-    { id: "", title: "class2" },
-    { id: "", title: "price_offer" },
-    { id: "", title: "category" },
-    { id: "", title: "counts" },
-    // { id: "", title: "category_product" },
-    // { id: "", title: "colors" },
-    { id: "", title: "property" },
-    // { id: "", title: "model" },
-    // { id: "", title: "product_image" },
-    // { id: "", title: "tags" },
-  ];
-
-  const [formData, setFormData] = useState<z.infer<typeof formSchema>>({
+  const [formData, setFormData] = useState({
     name: "",
     title: "",
     price: "0",
@@ -128,7 +111,7 @@ const AddProduct = () => {
         });
       }
     } else {
-      setFormData((prev) => ({
+      setFormData((prev: any) => ({
         ...prev,
         [event.target.name]: event.target.value,
       }));
@@ -138,7 +121,7 @@ const AddProduct = () => {
 
   const handleSelector = (event: string | undefined, title: string) => {
     if (event)
-      setFormData((prev) => ({
+      setFormData((prev: any) => ({
         ...prev,
         [title]: event,
       }));
@@ -149,28 +132,14 @@ const AddProduct = () => {
   ) => {
     console.log(event);
 
-    setFormData((prev) => ({
+    setFormData((prev: any) => ({
       ...prev,
       [title]: event,
     }));
   };
 
-  const [formError, setFormError] = useState<z.ZodFormattedError<
-    FormSchema,
-    string
-  > | null>(null);
+  const [formError, setFormError] = useState(null);
   const [touchedInput, setTouchedInput] = useState<string[]>([]);
-
-  useEffect(() => {
-    const parsedData = formSchema.safeParse(formData);
-    if (!parsedData.success) {
-      const err = parsedData.error.format();
-
-      setFormError(err);
-    } else {
-      setFormError(null);
-    }
-  }, [formData]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -195,7 +164,7 @@ const AddProduct = () => {
 
   const [selectedColor, setSelectedColor] = useState([]);
 
-  var brand: string[] = [];
+  var brand: any = [];
   for (let i = 0; i < allbrand.length; i++) {
     brand.push(allbrand[i].name);
   }
@@ -208,13 +177,13 @@ const AddProduct = () => {
         return (
           !details.value.includes(details.inputValue) &&
           details.inputValue.includes(
-            valid.filter((item) => item === details.inputValue)[0]
+            valid.filter((item: any) => item === details.inputValue)[0]
           )
         );
       },
       onValueChange(details) {
         if (details)
-          setFormData((prev) => ({
+          setFormData((prev: any) => ({
             ...prev,
             ["model"]: details.value,
           }));
@@ -234,13 +203,13 @@ const AddProduct = () => {
       <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
         {/* image */}
         <div className="w-[100%]  flex justify-center">
-          {/* <Upload
-              defaultImage={defaultImage}
-              setDefaultImage={setDefaultImage}
-              uploadedFiles={uploadedFiles}
-              setUploadedFiles={setUploadedFiles}
-              setFormData={setFormData}
-            /> */}
+          <Upload
+            defaultImage={defaultImage}
+            setDefaultImage={setDefaultImage}
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+            setFormData={setFormData}
+          />
         </div>
         {/*  */}
         {/*title */}
