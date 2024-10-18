@@ -128,7 +128,7 @@ const AddProduct = () => {
         });
       }
     } else {
-      setFormData((prev) => ({
+      setFormData((prev: any) => ({
         ...prev,
         [event.target.name]: event.target.value,
       }));
@@ -136,20 +136,17 @@ const AddProduct = () => {
     }
   };
 
-  const handleSelector = (event: string | undefined, title: string) => {
+  const handleSelector = (event: any, title: string) => {
     if (event)
-      setFormData((prev) => ({
+      setFormData((prev: any) => ({
         ...prev,
         [title]: event,
       }));
   };
-  const handleInputChangeColor = (
-    event: string[] | undefined,
-    title: string
-  ) => {
+  const handleInputChangeColor = (event: any, title: string) => {
     console.log(event);
 
-    setFormData((prev) => ({
+    setFormData((prev: any) => ({
       ...prev,
       [title]: event,
     }));
