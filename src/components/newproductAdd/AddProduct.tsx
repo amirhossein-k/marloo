@@ -134,16 +134,16 @@ const AddProduct = () => {
   > | null>(null);
   const [touchedInput, setTouchedInput] = useState<string[]>([]);
 
-  useEffect(() => {
-    const parsedData = formSchema.safeParse(formData);
-    if (!parsedData.success) {
-      const err = parsedData.error.format();
+  // useEffect(() => {
+  //   const parsedData = formSchema.safeParse(formData);
+  //   if (!parsedData.success) {
+  //     const err = parsedData.error.format();
 
-      setFormError(err);
-    } else {
-      setFormError(null);
-    }
-  }, [formData]);
+  //     setFormError(err);
+  //   } else {
+  //     setFormError(null);
+  //   }
+  // }, [formData]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
