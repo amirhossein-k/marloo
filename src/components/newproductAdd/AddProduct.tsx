@@ -3,8 +3,8 @@
 import React, { useRef, FormEvent, useEffect, useState } from "react";
 import { Select, Option } from "@material-tailwind/react";
 import { TagsInput } from "react-tag-input-component-2";
-import { z } from "zod";
-import { tree } from "next/dist/build/templates/app-page";
+// import { z } from "zod";
+// import { tree } from "next/dist/build/templates/app-page";
 import axios from "axios";
 import * as tagsInput from "@zag-js/tags-input";
 import { useMachine, normalizeProps } from "@zag-js/react";
@@ -14,14 +14,26 @@ import Upload from "../uploads/Upload";
 
 const AddProduct = () => {
   const [value, setValue] = useState<string>("react");
-  var tagproductt = ["xiamomi", "samsung", "new", "offer", "iphone"];
-  const [selectedTag, setSelectedTag] = useState(tagproductt);
+  const [selectedTag, setSelectedTag] = useState([
+    "xiamomi",
+    "samsung",
+    "new",
+    "offer",
+    "iphone",
+  ]);
   const [defaultImage, setDefaultImage] = useState<string>("");
-
-  var catproductt = ["اسپرت", "مردانه", "زنانه", "کودکانه", "فانتزی"];
-  const [selectedCat, setSelectedCat] = useState(catproductt);
-
+  const [selectedColor, setSelectedColor] = useState([]);
+  const [brand, setBrand] = useState<any>([]);
+  const [selectedCat, setSelectedCat] = useState([
+    "اسپرت",
+    "مردانه",
+    "زنانه",
+    "کودکانه",
+    "فانتزی",
+  ]);
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
+  const [formError, setFormError] = useState(null);
+  const [touchedInput, setTouchedInput] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -60,9 +72,6 @@ const AddProduct = () => {
       }));
   };
 
-  const [formError, setFormError] = useState(null);
-  const [touchedInput, setTouchedInput] = useState<string[]>([]);
-
   // useEffect(() => {
   //   const parsedData = formSchema.safeParse(formData);
   //   if (!parsedData.success) {
@@ -87,9 +96,6 @@ const AddProduct = () => {
       //handle additional erros ...
     }
   };
-
-  const [selectedColor, setSelectedColor] = useState([]);
-  const [brand, setBrand] = useState<any>([]);
 
   // useEffect(() => {
   //   for (let i = 0; i < allbrand.length; i++) {
