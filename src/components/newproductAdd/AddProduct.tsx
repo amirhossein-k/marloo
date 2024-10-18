@@ -276,7 +276,7 @@ const AddProduct = () => {
             style={{ minWidth: "100px" }}
             label="وضعیت محصول"
             value={valuee}
-            onChange={(event) => handleSelector(event, "status")}
+            // onChange={(event) => handleSelector(event, "status")}
             // onChange={(val: any) => setValue(val)}
             name="status"
           >
