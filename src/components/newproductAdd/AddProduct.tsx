@@ -75,7 +75,7 @@ const AddProduct = () => {
   // }, [formData]);
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log("ff");
     try {
       // const parsedFormValue = formSchema.safeParse(formData);
@@ -128,7 +128,7 @@ const AddProduct = () => {
     <form
       className="w-full p-4  bg-pink-400"
       // action={(e) => addNewOrder(e)}
-      onSubmit={(e) => handleSubmit(e)}
+      onSubmit={handleSubmit}
     >
       <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
         {/* image */}
