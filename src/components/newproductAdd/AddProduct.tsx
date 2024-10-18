@@ -1,41 +1,97 @@
 "use client";
 
-import React, { FormEvent, useEffect, useState } from "react";
-// import { Select, Option } from "@material-tailwind/react";
+import React, { useRef, FormEvent, useEffect, useState } from "react";
+import { Select, Option } from "@material-tailwind/react";
 import { TagsInput } from "react-tag-input-component-2";
-// import { z } from "zod";
-// import { tree } from "next/dist/build/templates/app-page";
-// import axios from "axios";
+import { z } from "zod";
+import { tree } from "next/dist/build/templates/app-page";
+import axios from "axios";
 import * as tagsInput from "@zag-js/tags-input";
 import { useMachine, normalizeProps } from "@zag-js/react";
 
 import allbrand from "../../../utils/allBrand.json";
 import Upload from "../uploads/Upload";
+const formSchema = z.object({
+  name: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
+
+  title: z
+    .string({ required_error: "title is required" })
+    .min(2, { message: "title must be more than 10 characters" })
+    .max(150, { message: "title must be less than 150 characters" })
+    .trim(),
+
+  price: z
+    .string({ required_error: "price is required" })
+    .refine((val) => val !== "uncategorised", {
+      message: "Choose category other than uncategorised",
+    }),
+  classs: z.optional(z.any()),
+  class2: z.optional(z.any()),
+  price_offer: z.optional(z.any()),
+
+  category: z
+    .string({ required_error: "Category is required" })
+    .refine((val) => val !== "uncategorised", {
+      message: "Choose category other than uncategorised",
+    }),
+
+  status: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
+  counts: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
+  category_product: z.array(z.string()),
+  colors: z.array(z.string()),
+  property: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
+  model: z.array(z.string()),
+  product_image: z.array(z.any()),
+  tags: z.array(z.string()),
+  defaultImage: z.string({ required_error: "defaultImage is required" }),
+});
+type FormSchema = z.infer<typeof formSchema>;
 
 const AddProduct = () => {
-  const [value, setValue] = useState<string>("react");
-  const [selectedTag, setSelectedTag] = useState([
-    "xiamomi",
-    "samsung",
-    "new",
-    "offer",
-    "iphone",
-  ]);
+  const [valuee, setValuee] = useState<any>("approved");
+  var tagproductt = ["xiamomi", "samsung", "new", "offer", "iphone"];
+  const [selectedTag, setSelectedTag] = useState(tagproductt);
   const [defaultImage, setDefaultImage] = useState<string>("");
-  const [selectedColor, setSelectedColor] = useState([]);
-  const [brand, setBrand] = useState<any>([]);
-  const [selectedCat, setSelectedCat] = useState([
-    "اسپرت",
-    "مردانه",
-    "زنانه",
-    "کودکانه",
-    "فانتزی",
-  ]);
-  const [uploadedFiles, setUploadedFiles] = useState<any>([]);
-  const [formError, setFormError] = useState(null);
-  const [touchedInput, setTouchedInput] = useState<string[]>([]);
 
-  const [formData, setFormData] = useState({
+  var catproductt = ["اسپرت", "مردانه", "زنانه", "کودکانه", "فانتزی"];
+  const [selectedCat, setSelectedCat] = useState(catproductt);
+
+  const [uploadedFiles, setUploadedFiles] = useState<any>([]);
+
+  const fromItem = [
+    { id: "", title: "name" },
+    { id: "", title: "title" },
+    { id: "", title: "price" },
+    { id: "", title: "classs" },
+    { id: "", title: "class2" },
+    { id: "", title: "price_offer" },
+    { id: "", title: "category" },
+    { id: "", title: "counts" },
+    // { id: "", title: "category_product" },
+    // { id: "", title: "colors" },
+    { id: "", title: "property" },
+    // { id: "", title: "model" },
+    // { id: "", title: "product_image" },
+    // { id: "", title: "tags" },
+  ];
+
+  const [formData, setFormData] = useState<z.infer<typeof formSchema>>({
     name: "",
     title: "",
     price: "0",
@@ -51,81 +107,125 @@ const AddProduct = () => {
     model: [],
     product_image: [],
     defaultImage: "",
-    tags: ["xiamomi", "samsung", "new", "offer", "iphone"],
+    tags: selectedTag,
   });
   const [acctive, setActive] = useState("");
 
-  const handleSelector = (event: any, title: string) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    if (!touchedInput.includes(event.target.name)) {
+      setTouchedInput([...touchedInput, event.target.name]);
+    }
+
+    if (event.target.type === "checkbox") {
+      if (event.target && event.target instanceof HTMLInputElement) {
+        setFormData({
+          ...formData,
+          [event.target.name]: event.target.checked,
+        });
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      setActive(event.target.name);
+    }
+  };
+
+  const handleSelector = (event: string | undefined, title: string) => {
     if (event)
-      setFormData((prev: any) => ({
+      setFormData((prev) => ({
         ...prev,
         [title]: event,
       }));
   };
-  const handleInputChangeColor = (event: any, title: string) => {
+  const handleInputChangeColor = (
+    event: string[] | undefined,
+    title: string
+  ) => {
     console.log(event);
 
-    if (event)
-      setFormData((prev: any) => ({
-        ...prev,
-        [title]: event,
-      }));
+    setFormData((prev) => ({
+      ...prev,
+      [title]: event,
+    }));
   };
 
-  // useEffect(() => {
-  //   const parsedData = formSchema.safeParse(formData);
-  //   if (!parsedData.success) {
-  //     const err = parsedData.error.format();
+  const [formError, setFormError] = useState<z.ZodFormattedError<
+    FormSchema,
+    string
+  > | null>(null);
+  const [touchedInput, setTouchedInput] = useState<string[]>([]);
 
-  //     setFormError(err);
-  //   } else {
-  //     setFormError(null);
-  //   }
-  // }, [formData]);
+  useEffect(() => {
+    const parsedData = formSchema.safeParse(formData);
+    if (!parsedData.success) {
+      const err = parsedData.error.format();
 
-  const handleSubmit = () => {
-    // e.preventDefault();
-    console.log("ff");
+      setFormError(err);
+    } else {
+      setFormError(null);
+    }
+  }, [formData]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    // console.log("ff");
     try {
-      // const parsedFormValue = formSchema.safeParse(formData);
-      // const login = await axios.post("/api/product", formData);
-      // console.log(login);
+      const parsedFormValue = formSchema.safeParse(formData);
+
+      if (!parsedFormValue.success) {
+        const err = parsedFormValue.error.format().category;
+
+        alert("error");
+        return;
+      }
+
+      const login = axios.post("/api/product", parsedFormValue.data);
+      console.log(login);
     } catch (error) {
       console.log("caught error");
       //handle additional erros ...
     }
   };
 
-  // useEffect(() => {
-  //   for (let i = 0; i < allbrand.length; i++) {
-  //     setBrand(allbrand[i].name);
-  //     // brand.push(allbrand[i].name);
-  //   }
-  // }, [brand]);
+  const [selectedColor, setSelectedColor] = useState([]);
+  const [brand, setBrand] = useState<any>([]);
+
+  useEffect(() => {
+    for (let i = 0; i < allbrand.length; i++) {
+      setBrand(allbrand[i].name);
+      // brand.push(allbrand[i].name);
+    }
+  }, [brand]);
   // var brand: string[] = [];
-  // const [selectedModel, send] = useMachine(
-  //   tagsInput.machine({
-  //     id: "1",
-  //     value: [],
-  //     validate(details) {
-  //       var valid = brand;
-  //       return (
-  //         !details.value.includes(details.inputValue) &&
-  //         details.inputValue.includes(
-  //           valid.filter((item: any) => item === details.inputValue)[0]
-  //         )
-  //       );
-  //     },
-  //     onValueChange(details) {
-  //       if (details)
-  //         setFormData((prev) => ({
-  //           ...prev,
-  //           ["model"]: details.value,
-  //         }));
-  //     },
-  //   })
-  // );
-  // const apiModel = tagsInput.connect(selectedModel, send, normalizeProps);
+  const [selectedModel, send] = useMachine(
+    tagsInput.machine({
+      id: "1",
+      value: [],
+      validate(details) {
+        var valid = brand;
+        return (
+          !details.value.includes(details.inputValue) &&
+          details.inputValue.includes(
+            valid.filter((item: any) => item === details.inputValue)[0]
+          )
+        );
+      },
+      onValueChange(details) {
+        if (details)
+          setFormData((prev) => ({
+            ...prev,
+            ["model"]: details.value,
+          }));
+      },
+    })
+  );
+  const apiModel = tagsInput.connect(selectedModel, send, normalizeProps);
   // console.log(selectedModel.context.value, "state");
 
   return (
@@ -133,7 +233,7 @@ const AddProduct = () => {
     <form
       className="w-full p-4  bg-pink-400"
       // action={(e) => addNewOrder(e)}
-      onSubmit={handleSubmit}
+      onSubmit={(e) => handleSubmit(e)}
     >
       <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
         {/* image */}
@@ -171,17 +271,17 @@ const AddProduct = () => {
 
         {/* {children} */}
         <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
-          {/* <Select
+          <Select
             className=" overflow-hidden"
             style={{ minWidth: "100px" }}
             label="وضعیت محصول"
-            value={value}
+            value={valuee}
             onChange={(event) => handleSelector(event, "status")}
             // onChange={(val: any) => setValue(val)}
             name="status"
           >
             <Option value="approved">موجود</Option>
-          </Select> */}
+          </Select>
         </div>
         <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
           {/* <Select
