@@ -196,36 +196,36 @@ const AddProduct = () => {
   const [selectedColor, setSelectedColor] = useState([]);
   const [brand, setBrand] = useState<any>([]);
 
-  useEffect(() => {
-    for (let i = 0; i < allbrand.length; i++) {
-      setBrand(allbrand[i].name);
-      // brand.push(allbrand[i].name);
-    }
-  }, [brand]);
+  // useEffect(() => {
+  //   for (let i = 0; i < allbrand.length; i++) {
+  //     setBrand(allbrand[i].name);
+  //     // brand.push(allbrand[i].name);
+  //   }
+  // }, [brand]);
   // var brand: string[] = [];
-  const [selectedModel, send] = useMachine(
-    tagsInput.machine({
-      id: "1",
-      value: [],
-      validate(details) {
-        var valid = brand;
-        return (
-          !details.value.includes(details.inputValue) &&
-          details.inputValue.includes(
-            valid.filter((item: any) => item === details.inputValue)[0]
-          )
-        );
-      },
-      onValueChange(details) {
-        if (details)
-          setFormData((prev) => ({
-            ...prev,
-            ["model"]: details.value,
-          }));
-      },
-    })
-  );
-  const apiModel = tagsInput.connect(selectedModel, send, normalizeProps);
+  // const [selectedModel, send] = useMachine(
+  //   tagsInput.machine({
+  //     id: "1",
+  //     value: [],
+  //     validate(details) {
+  //       var valid = brand;
+  //       return (
+  //         !details.value.includes(details.inputValue) &&
+  //         details.inputValue.includes(
+  //           valid.filter((item: any) => item === details.inputValue)[0]
+  //         )
+  //       );
+  //     },
+  //     onValueChange(details) {
+  //       if (details)
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           ["model"]: details.value,
+  //         }));
+  //     },
+  //   })
+  // );
+  // const apiModel = tagsInput.connect(selectedModel, send, normalizeProps);
   // console.log(selectedModel.context.value, "state");
 
   return (
