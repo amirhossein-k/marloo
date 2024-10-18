@@ -4,15 +4,64 @@ import React, { useRef, FormEvent, useEffect, useState } from "react";
 import { Select, Option } from "@material-tailwind/react";
 import { TagsInput } from "react-tag-input-component-2";
 import { z } from "zod";
-// import { tree } from "next/dist/build/templates/app-page";
+import { tree } from "next/dist/build/templates/app-page";
 import axios from "axios";
 import * as tagsInput from "@zag-js/tags-input";
 import { useMachine, normalizeProps } from "@zag-js/react";
 
 import allbrand from "../../../utils/allBrand.json";
 import Upload from "../uploads/Upload";
+const formSchema = z.object({
+  name: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
 
-// type FormSchema = z.infer<typeof formSchema>;
+  title: z
+    .string({ required_error: "title is required" })
+    .min(2, { message: "title must be more than 10 characters" })
+    .max(150, { message: "title must be less than 150 characters" })
+    .trim(),
+
+  price: z
+    .string({ required_error: "price is required" })
+    .refine((val) => val !== "uncategorised", {
+      message: "Choose category other than uncategorised",
+    }),
+  classs: z.optional(z.any()),
+  class2: z.optional(z.any()),
+  price_offer: z.optional(z.any()),
+
+  category: z
+    .string({ required_error: "Category is required" })
+    .refine((val) => val !== "uncategorised", {
+      message: "Choose category other than uncategorised",
+    }),
+
+  status: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
+  counts: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
+  category_product: z.array(z.string()),
+  colors: z.array(z.string()),
+  property: z
+    .string({ required_error: "Name is required" })
+    .min(2, { message: "Name must be more than 5 characters" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .trim(),
+  model: z.array(z.string()),
+  product_image: z.array(z.any()),
+  tags: z.array(z.string()),
+  defaultImage: z.string({ required_error: "defaultImage is required" }),
+});
+type FormSchema = z.infer<typeof formSchema>;
 
 const AddProduct = () => {
   const [value, setValue] = useState<string>("react");
@@ -25,7 +74,24 @@ const AddProduct = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
 
-  const [formData, setFormData] = useState({
+  const fromItem = [
+    { id: "", title: "name" },
+    { id: "", title: "title" },
+    { id: "", title: "price" },
+    { id: "", title: "classs" },
+    { id: "", title: "class2" },
+    { id: "", title: "price_offer" },
+    { id: "", title: "category" },
+    { id: "", title: "counts" },
+    // { id: "", title: "category_product" },
+    // { id: "", title: "colors" },
+    { id: "", title: "property" },
+    // { id: "", title: "model" },
+    // { id: "", title: "product_image" },
+    // { id: "", title: "tags" },
+  ];
+
+  const [formData, setFormData] = useState<z.infer<typeof formSchema>>({
     name: "",
     title: "",
     price: "0",
@@ -62,7 +128,7 @@ const AddProduct = () => {
         });
       }
     } else {
-      setFormData((prev: any) => ({
+      setFormData((prev) => ({
         ...prev,
         [event.target.name]: event.target.value,
       }));
@@ -72,7 +138,7 @@ const AddProduct = () => {
 
   const handleSelector = (event: string | undefined, title: string) => {
     if (event)
-      setFormData((prev: any) => ({
+      setFormData((prev) => ({
         ...prev,
         [title]: event,
       }));
@@ -83,29 +149,43 @@ const AddProduct = () => {
   ) => {
     console.log(event);
 
-    setFormData((prev: any) => ({
+    setFormData((prev) => ({
       ...prev,
       [title]: event,
     }));
   };
 
-  const [formError, setFormError] = useState(null);
+  const [formError, setFormError] = useState<z.ZodFormattedError<
+    FormSchema,
+    string
+  > | null>(null);
   const [touchedInput, setTouchedInput] = useState<string[]>([]);
+
+  useEffect(() => {
+    const parsedData = formSchema.safeParse(formData);
+    if (!parsedData.success) {
+      const err = parsedData.error.format();
+
+      setFormError(err);
+    } else {
+      setFormError(null);
+    }
+  }, [formData]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("submit");
+    // console.log("ff");
     try {
-      const parsedFormValue = formData;
+      const parsedFormValue = formSchema.safeParse(formData);
 
-      // if (!parsedFormValue.success) {
-      //   const err = parsedFormValue.error.format().category;
+      if (!parsedFormValue.success) {
+        const err = parsedFormValue.error.format().category;
 
-      //   alert("error");
-      //   return;
-      // }
+        alert("error");
+        return;
+      }
 
-      const login = axios.post("/api/product", parsedFormValue);
+      const login = axios.post("/api/product", parsedFormValue.data);
       console.log(login);
     } catch (error) {
       console.log("caught error");
@@ -115,7 +195,7 @@ const AddProduct = () => {
 
   const [selectedColor, setSelectedColor] = useState([]);
 
-  var brand: any = [];
+  var brand: string[] = [];
   for (let i = 0; i < allbrand.length; i++) {
     brand.push(allbrand[i].name);
   }
@@ -128,13 +208,13 @@ const AddProduct = () => {
         return (
           !details.value.includes(details.inputValue) &&
           details.inputValue.includes(
-            valid.filter((item: any) => item === details.inputValue)[0]
+            valid.filter((item) => item === details.inputValue)[0]
           )
         );
       },
       onValueChange(details) {
         if (details)
-          setFormData((prev: any) => ({
+          setFormData((prev) => ({
             ...prev,
             ["model"]: details.value,
           }));
@@ -149,7 +229,7 @@ const AddProduct = () => {
     <form
       className="w-full p-4  bg-pink-400"
       // action={(e) => addNewOrder(e)}
-      onSubmit={(e: any) => handleSubmit(e)}
+      // onSubmit={(e) => handleSubmit(e)}
     >
       <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
         {/* image */}
@@ -242,41 +322,44 @@ const AddProduct = () => {
         </div>
         {/* model  */}
         <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center ">
-          {apiModel && (
-            <div
-              {...apiModel.getRootProps()}
-              className="bg-gray-50 rounded-md flex flex-row-reverse gap-2 flex-wrap"
-            >
-              {apiModel.value.map((value, index) => (
-                <span key={index} {...apiModel.getItemProps({ index, value })}>
-                  <div
-                    {...apiModel.getItemPreviewProps({ index, value })}
-                    className="bg-green-200 flex flex-row rounded-md gap-2"
+          {/* {apiModel && (
+              <div
+                {...apiModel.getRootProps()}
+                className="bg-gray-50 rounded-md flex flex-row-reverse gap-2 flex-wrap"
+              >
+                {apiModel.value.map((value, index) => (
+                  <span
+                    key={index}
+                    {...apiModel.getItemProps({ index, value })}
                   >
-                    <button
-                      className="bg-green-200 rounded-tl-md rounded-bl-md py-[1px] px-1"
-                      {...apiModel.getItemDeleteTriggerProps({
-                        index,
-                        value,
-                      })}
+                    <div
+                      {...apiModel.getItemPreviewProps({ index, value })}
+                      className="bg-green-200 flex flex-row rounded-md gap-2"
                     >
-                      &#x2715;
-                    </button>
-                    <span className="bg-green-200 py-[3px]  rounded-tr-md rounded-br-md w-full h-full flex flex-row">
-                      {value}{" "}
-                    </span>
-                  </div>
-                  <input {...apiModel.getItemInputProps({ index, value })} />
-                </span>
-              ))}
-              <input
-                placeholder="مدل ..."
-                {...apiModel.getInputProps()}
-                className="inline w-full"
-                dir="rtl"
-              />
-            </div>
-          )}
+                      <button
+                        className="bg-green-200 rounded-tl-md rounded-bl-md py-[1px] px-1"
+                        {...apiModel.getItemDeleteTriggerProps({
+                          index,
+                          value,
+                        })}
+                      >
+                        &#x2715;
+                      </button>
+                      <span className="bg-green-200 py-[3px]  rounded-tr-md rounded-br-md w-full h-full flex flex-row">
+                        {value}{" "}
+                      </span>
+                    </div>
+                    <input {...apiModel.getItemInputProps({ index, value })} />
+                  </span>
+                ))}
+                <input
+                  placeholder="مدل ..."
+                  {...apiModel.getInputProps()}
+                  className="inline w-full"
+                  dir="rtl"
+                />
+              </div>
+            )} */}
         </div>
 
         {/*  */}
