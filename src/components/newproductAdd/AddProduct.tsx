@@ -111,31 +111,6 @@ const AddProduct = () => {
   });
   const [acctive, setActive] = useState("");
 
-  const handleInputChange = (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    if (!touchedInput.includes(event.target.name)) {
-      setTouchedInput([...touchedInput, event.target.name]);
-    }
-
-    if (event.target.type === "checkbox") {
-      if (event.target && event.target instanceof HTMLInputElement) {
-        setFormData({
-          ...formData,
-          [event.target.name]: event.target.checked,
-        });
-      }
-    } else {
-      setFormData((prev: any) => ({
-        ...prev,
-        [event.target.name]: event.target.value,
-      }));
-      setActive(event.target.name);
-    }
-  };
-
   const handleSelector = (event: any, title: string) => {
     if (event)
       setFormData((prev: any) => ({
@@ -146,10 +121,11 @@ const AddProduct = () => {
   const handleInputChangeColor = (event: any, title: string) => {
     console.log(event);
 
-    setFormData((prev: any) => ({
-      ...prev,
-      [title]: event,
-    }));
+    if (event)
+      setFormData((prev: any) => ({
+        ...prev,
+        [title]: event,
+      }));
   };
 
   const [formError, setFormError] = useState<z.ZodFormattedError<
@@ -182,7 +158,7 @@ const AddProduct = () => {
         return;
       }
 
-      const login = axios.post("/api/product", parsedFormValue.data);
+      const login = await axios.post("/api/product", parsedFormValue.data);
       console.log(login);
     } catch (error) {
       console.log("caught error");
