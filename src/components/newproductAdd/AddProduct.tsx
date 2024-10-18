@@ -5,7 +5,7 @@ import { Select, Option } from "@material-tailwind/react";
 import { TagsInput } from "react-tag-input-component-2";
 // import { z } from "zod";
 // import { tree } from "next/dist/build/templates/app-page";
-import axios from "axios";
+// import axios from "axios";
 import * as tagsInput from "@zag-js/tags-input";
 import { useMachine, normalizeProps } from "@zag-js/react";
 
@@ -88,9 +88,8 @@ const AddProduct = () => {
     console.log("ff");
     try {
       // const parsedFormValue = formSchema.safeParse(formData);
-
-      const login = await axios.post("/api/product", formData);
-      console.log(login);
+      // const login = await axios.post("/api/product", formData);
+      // console.log(login);
     } catch (error) {
       console.log("caught error");
       //handle additional erros ...
