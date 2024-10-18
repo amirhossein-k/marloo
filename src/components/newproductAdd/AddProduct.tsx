@@ -194,11 +194,15 @@ const AddProduct = () => {
   };
 
   const [selectedColor, setSelectedColor] = useState([]);
+  const [brand, setBrand] = useState<any>([]);
 
-  var brand: string[] = [];
-  for (let i = 0; i < allbrand.length; i++) {
-    brand.push(allbrand[i].name);
-  }
+  useEffect(() => {
+    for (let i = 0; i < allbrand.length; i++) {
+      setBrand(allbrand[i].name);
+      // brand.push(allbrand[i].name);
+    }
+  }, [brand]);
+  // var brand: string[] = [];
   const [selectedModel, send] = useMachine(
     tagsInput.machine({
       id: "1",
@@ -208,7 +212,7 @@ const AddProduct = () => {
         return (
           !details.value.includes(details.inputValue) &&
           details.inputValue.includes(
-            valid.filter((item) => item === details.inputValue)[0]
+            valid.filter((item: any) => item === details.inputValue)[0]
           )
         );
       },
@@ -229,7 +233,7 @@ const AddProduct = () => {
     <form
       className="w-full p-4  bg-pink-400"
       // action={(e) => addNewOrder(e)}
-      // onSubmit={(e) => handleSubmit(e)}
+      onSubmit={(e) => handleSubmit(e)}
     >
       <div className="flex gap-2 flex-wrap w-full   mb-6" dir="rtl">
         {/* image */}
