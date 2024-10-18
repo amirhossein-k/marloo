@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FormEvent, useEffect, useState } from "react";
-import { Select, Option } from "@material-tailwind/react";
+// import { Select, Option } from "@material-tailwind/react";
 import { TagsInput } from "react-tag-input-component-2";
 // import { z } from "zod";
 // import { tree } from "next/dist/build/templates/app-page";
@@ -171,7 +171,7 @@ const AddProduct = () => {
 
         {/* {children} */}
         <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
-          <Select
+          {/* <Select
             className=" overflow-hidden"
             style={{ minWidth: "100px" }}
             label="وضعیت محصول"
@@ -181,7 +181,7 @@ const AddProduct = () => {
             name="status"
           >
             <Option value="approved">موجود</Option>
-          </Select>
+          </Select> */}
         </div>
         <div className="w-[100%] md:w-[40%] lg:w-[30%]flex justify-center">
           {/* <Select
