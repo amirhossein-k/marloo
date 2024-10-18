@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Select, Option } from "@material-tailwind/react";
 import { TagsInput } from "react-tag-input-component-2";
 // import { z } from "zod";
@@ -51,7 +51,7 @@ const AddProduct = () => {
     model: [],
     product_image: [],
     defaultImage: "",
-    tags: selectedTag,
+    tags: ["xiamomi", "samsung", "new", "offer", "iphone"],
   });
   const [acctive, setActive] = useState("");
 
@@ -83,7 +83,7 @@ const AddProduct = () => {
   //   }
   // }, [formData]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = () => {
     // e.preventDefault();
     console.log("ff");
     try {
