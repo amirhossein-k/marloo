@@ -11,57 +11,6 @@ import { useMachine, normalizeProps } from "@zag-js/react";
 
 import allbrand from "../../../utils/allBrand.json";
 import Upload from "../uploads/Upload";
-const formSchema = z.object({
-  name: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
-
-  title: z
-    .string({ required_error: "title is required" })
-    .min(2, { message: "title must be more than 10 characters" })
-    .max(150, { message: "title must be less than 150 characters" })
-    .trim(),
-
-  price: z
-    .string({ required_error: "price is required" })
-    .refine((val) => val !== "uncategorised", {
-      message: "Choose category other than uncategorised",
-    }),
-  classs: z.optional(z.any()),
-  class2: z.optional(z.any()),
-  price_offer: z.optional(z.any()),
-
-  category: z
-    .string({ required_error: "Category is required" })
-    .refine((val) => val !== "uncategorised", {
-      message: "Choose category other than uncategorised",
-    }),
-
-  status: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
-  counts: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
-  category_product: z.array(z.string()),
-  colors: z.array(z.string()),
-  property: z
-    .string({ required_error: "Name is required" })
-    .min(2, { message: "Name must be more than 5 characters" })
-    .max(50, { message: "Name must be less than 50 characters" })
-    .trim(),
-  model: z.array(z.string()),
-  product_image: z.array(z.any()),
-  tags: z.array(z.string()),
-  defaultImage: z.string({ required_error: "defaultImage is required" }),
-});
-type FormSchema = z.infer<typeof formSchema>;
 
 const AddProduct = () => {
   const [value, setValue] = useState<string>("react");
@@ -74,24 +23,7 @@ const AddProduct = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
 
-  const fromItem = [
-    { id: "", title: "name" },
-    { id: "", title: "title" },
-    { id: "", title: "price" },
-    { id: "", title: "classs" },
-    { id: "", title: "class2" },
-    { id: "", title: "price_offer" },
-    { id: "", title: "category" },
-    { id: "", title: "counts" },
-    // { id: "", title: "category_product" },
-    // { id: "", title: "colors" },
-    { id: "", title: "property" },
-    // { id: "", title: "model" },
-    // { id: "", title: "product_image" },
-    // { id: "", title: "tags" },
-  ];
-
-  const [formData, setFormData] = useState<z.infer<typeof formSchema>>({
+  const [formData, setFormData] = useState({
     name: "",
     title: "",
     price: "0",
@@ -128,10 +60,7 @@ const AddProduct = () => {
       }));
   };
 
-  const [formError, setFormError] = useState<z.ZodFormattedError<
-    FormSchema,
-    string
-  > | null>(null);
+  const [formError, setFormError] = useState(null);
   const [touchedInput, setTouchedInput] = useState<string[]>([]);
 
   // useEffect(() => {
@@ -147,18 +76,11 @@ const AddProduct = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // console.log("ff");
+    console.log("ff");
     try {
-      const parsedFormValue = formSchema.safeParse(formData);
+      // const parsedFormValue = formSchema.safeParse(formData);
 
-      if (!parsedFormValue.success) {
-        const err = parsedFormValue.error.format().category;
-
-        alert("error");
-        return;
-      }
-
-      const login = await axios.post("/api/product", parsedFormValue.data);
+      const login = await axios.post("/api/product", formData);
       console.log(login);
     } catch (error) {
       console.log("caught error");
