@@ -29,10 +29,14 @@ const Sidebar = () => {
 
   return (
     <aside
-      className="hidden md:flex w-64 min-h-screen h-screen bg-gray-800 text-gray-300 flex-col fixed"
+      // className="hidden md:flex w-64 min-h-screen h-screen bg-gray-800 text-gray-300 flex-col fixed"
+      className="hidden md:flex w-64 bg-gray-800 text-gray-300 flex-col sticky top-0 h-screen overflow-y-auto"
       dir="rtl"
     >
-      <div className="p-4 border-b border-gray-700">
+      <div
+        //  className="p-4 border-b border-gray-700"
+        className="p-4 border-b border-gray-700 sticky top-0 bg-gray-800 z-10"
+      >
         <h1 className="text-2xl font-bold text-white text-center">Your Logo</h1>
       </div>
       <nav className="flex-1 overflow-y-auto">
@@ -92,7 +96,7 @@ const Sidebar = () => {
                         isOpen ? "max-h-screen" : "max-h-0"
                       }`}
                     >
-                      <ul className="py-1 pl-8 pr-4 mx-2 w-full bg-gray-900/50">
+                      <ul className="py-1 pr-8 pl-4 mx-2 w-full bg-gray-900/50">
                         {category.subCategories.map((sub: any) => {
                           const isSubActive = pathname === sub.href;
                           return (

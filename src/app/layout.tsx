@@ -52,11 +52,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa">
+    <html lang="fa" className="h-full">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <Providers>
+        {/* <Providers>
           <LoadingProvider>
             <LoadingOverlay />
             <Toaster position="top-center" />
@@ -66,7 +66,6 @@ export default function RootLayout({
               <Sidebar />
             </div>
 
-            {/* تغییر اینجا 👇 */}
             <div className="flex flex-col min-h-screen">
               <main className="flex-grow">{children}</main>
               <footer>
@@ -75,6 +74,38 @@ export default function RootLayout({
             </div>
 
             <NavbarButtom />
+          </LoadingProvider>
+        </Providers> */}
+        <Providers>
+          <LoadingProvider>
+            <LoadingOverlay />
+            <Toaster position="top-center" />
+
+            {/* ساختار اصلی */}
+            <div className="flex flex-col min-h-screen">
+              {/* هدر و ناوبری */}
+              <NavbarComponents />
+              <NavbarButtom /> {/* انتقال به اینجا */}
+              {/* محتوای اصلی */}
+              {/* <div className="flex flex-1 relative">
+                <div className="w-fit absolute right-0 top-0 z-30" dir="rtl">
+                  <Sidebar />
+                </div> */}
+              <div className="flex flex-1">
+                {/* محتوای صفحه */}
+                <main className="flex-1 w-full">{children}</main>
+                {/* سایدبار */}
+                <div className="hidden md:block flex-shrink-0">
+                  <Sidebar />
+                </div>
+              </div>
+              {/* کارت سایدبار */}
+              <CartSideBar />
+              {/* فوتر */}
+              <footer className="mt-auto">
+                <Footer />
+              </footer>
+            </div>
           </LoadingProvider>
         </Providers>
       </body>

@@ -52,7 +52,7 @@ export default function HomeClient({
 
   return (
     <div
-      className={`flex-1 h-screen w-full ${
+      className={`flex-1  w-full ${
         openNav ? "" : "   md:w-[calc(100vw-269px)]"
       } `}
     >
