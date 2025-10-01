@@ -52,18 +52,18 @@ export default function HomeClient({
 
   return (
     <div
-      className={`flex-1  w-full ${
+      className={`flex-1  w-full max-w-full  overflow-x-hidden overflow-y-hidden h-full ${
         openNav ? "" : "   md:w-[calc(100vw-269px)]"
       } `}
     >
       {/* 🔹 بخش اول (Hero Slider) */}
 
-      {/* <div className="h-[500px] "> */}
-      <SliderComponent Slide={slides} />
-      {/* </div> */}
+      <div className="w-full max-w-full overflow-hidden">
+        <SliderComponent Slide={slides} />
+      </div>
 
       {/* 🔹 ادامه محتوا */}
-      <div className=" my-3 ">
+      <div className=" my-3 w-full max-w-full overflow-hidden">
         <SliderComponent
           Slide={slides2}
           height="h-[260px]"
@@ -79,7 +79,10 @@ export default function HomeClient({
         <BannerSlider />
         <NewProduct newproduct={newProducts} />
       </div>
-      <section className="container mx-auto right-[2px] top-10 bg-red-300  relative">
+      <section
+        // className="container mx-auto right-[2px] top-10 bg-red-300  relative"
+        className="container mx-auto px-4 w-full max-w-full mb-8"
+      >
         <h2 className="text-2xl font-bold mb-6 text-right">محصولات ویژه</h2>
         <p className="text-right">اینجا بقیه محتوا میاد ...</p>
       </section>

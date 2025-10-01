@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="fa" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-x-hidden`}
       >
         {/* <Providers>
           <LoadingProvider>
@@ -82,7 +82,7 @@ export default function RootLayout({
             <Toaster position="top-center" />
 
             {/* ساختار اصلی */}
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col min-h-screen w-full  overflow-x-hidden">
               {/* هدر و ناوبری */}
               <NavbarComponents />
               <NavbarButtom /> {/* انتقال به اینجا */}
@@ -91,9 +91,11 @@ export default function RootLayout({
                 <div className="w-fit absolute right-0 top-0 z-30" dir="rtl">
                   <Sidebar />
                 </div> */}
-              <div className="flex flex-1">
+              <div className="flex flex-1 w-full">
                 {/* محتوای صفحه */}
-                <main className="flex-1 w-full">{children}</main>
+                <main className="flex-1 w-full  max-w-full overflow-x-hidden overflow-y-hidden">
+                  {children}
+                </main>
                 {/* سایدبار */}
                 <div className="hidden md:block flex-shrink-0">
                   <Sidebar />
@@ -102,7 +104,7 @@ export default function RootLayout({
               {/* کارت سایدبار */}
               <CartSideBar />
               {/* فوتر */}
-              <footer className="mt-auto">
+              <footer className="mt-auto w-full  relative z-10">
                 <Footer />
               </footer>
             </div>
