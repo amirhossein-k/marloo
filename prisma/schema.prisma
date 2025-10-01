@@ -56,7 +56,7 @@ model User {
 }
 
 model InvoiceProduct {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   // order   Product[] @relation("poroductOrder") // اقلام سبد خرید
   // idOrder String
 
@@ -117,64 +117,64 @@ model Adress {
 }
 
 model Product {
-  id                    String           @id @default(auto()) @map("_id") @db.ObjectId
-  title                 String
-  price                 Float // قیمت اصلی تامین‌کننده
-  priceWithProfit       Float? // قیمت فروشگاه (با سود شما)
-  content               String?
-  tableContent          String?
-  count                 Float
-  countproduct          Float //مقدار کل موجودی
-  priceOffer            Float
-  listProperty          ListProperty[]
-  tags                  String[]
-  colors                Colors[]         @relation("colors")
-  review                ReviewList[]
-  productImage          ProductImage[]
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  price              Float // قیمت اصلی تامین‌کننده
+  priceWithProfit    Float? // قیمت فروشگاه (با سود شما)
+  content            String?
+  tableContent       String?
+  count              Float
+  countproduct       Float //مقدار کل موجودی
+  priceOffer         Float?
+  listProperty       ListProperty[]
+  tags               String[]
+  colors             Colors[]            @relation("colors")
+  review             ReviewList[]
+  productImage       ProductImage[]
   // selectedVariantId   String?        @db.ObjectId // ← این خط را اضافه کنید
-  published             Boolean          @default(false)
-  author                User             @relation("userPost", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  authorId              String           @db.ObjectId
-  categoryList          CategoryList[]
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime         @updatedAt
+  published          Boolean             @default(false)
+  author             User                @relation("userPost", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId           String              @db.ObjectId
+  categoryList       CategoryList[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
   // productOrderOwner     InvoiceProduct?  @relation("poroductOrder", fields: [productOrderOwnerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOrderOwnerId   String?          @db.ObjectId
   // 🔥 ارتباط با واریانت‌ها
-  productVariants       ProductVariant[]
-  purchaseOrderItems    PurchaseOrderItem[]
-   
+  productVariants    ProductVariant[]
+  purchaseOrderItems PurchaseOrderItem[]
+
   lastUpdatedBySupplier DateTime?
-  supplier              Supplier?        @relation("supplierProducts", fields: [supplierId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  supplierId            String?          @db.ObjectId
+  supplier              Supplier? @relation("supplierProducts", fields: [supplierId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  supplierId            String?   @db.ObjectId
 }
 
 model Supplier {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
   name              String
   password          String
-  phoneNumber       String          @unique
+  phoneNumber       String    @unique
   address           String?
-  products          Product[]       @relation("supplierProducts")
+  products          Product[] @relation("supplierProducts")
   // purchaseOrders    PurchaseOrder[] @relation("supplierPurchaseOrders")
   lastReminderSent  DateTime?
   reminderFrequency String? // daily, weekly
   reminderTime      String? // HH:MM format
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   // PurchaseOrderId      String   @db.ObjectId //ایدی هر سفارش 
   // PurchaseOrder        PurchaseOrder  @relation("supplierPurchaseOrders", fields: [PurchaseOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model PurchaseOrder {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String              @id @default(auto()) @map("_id") @db.ObjectId
   items           PurchaseOrderItem[]
-// supplier Supplier[]    @relation("supplierPurchaseOrders") //لیست تامین کننده هر سفارش 
+  // supplier Supplier[]    @relation("supplierPurchaseOrders") //لیست تامین کننده هر سفارش 
   // supplierId      String   @db.ObjectId ///ایدی تامین کننده
   // supplier        Supplier @relation("supplierPurchaseOrders", fields: [supplierId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  storeOwnerId    String   @db.ObjectId ///ایدی خریدار
-  storeOwner      User     @relation("userPurchaseOrders", fields: [storeOwnerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeOwnerId    String              @db.ObjectId ///ایدی خریدار
+  storeOwner      User                @relation("userPurchaseOrders", fields: [storeOwnerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // quantity        Float
   // colorsSelect    String //هر کابر ایدی دارد برای هر محصول
   totalPrice      Float
@@ -190,19 +190,18 @@ model PurchaseOrder {
 }
 
 model PurchaseOrderItem {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
- orderId     String        @db.ObjectId
-  order       PurchaseOrder @relation(fields: [orderId], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  id      String        @id @default(auto()) @map("_id") @db.ObjectId
+  orderId String        @db.ObjectId
+  order   PurchaseOrder @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  product         Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId       String        @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId String  @db.ObjectId
 
-  quantity        Int           @default(1)
-  colorsSelect           String?
-  unitPrice       Float
-  totalPrice      Float
+  quantity     Int     @default(1)
+  colorsSelect String?
+  unitPrice    Float
+  totalPrice   Float
 }
-
 
 model ProductVariant {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
