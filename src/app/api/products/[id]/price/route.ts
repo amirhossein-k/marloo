@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
 
 
 export async function PATCH(req: Request,
-    { params }: { params: { id: string } }
+    context: { params: { id: string } }
 ) {
 
     try {
@@ -17,7 +17,7 @@ export async function PATCH(req: Request,
             return NextResponse.json({ error: true, success: false, message: 'ادمین نیستی شیطون بلا' }, { status: 401 })
         }
 
-        const { id } = params;
+        const { id } = context.params;
         const { price, priceOffer } = await req.json();
 
         if (typeof price !== 'number' || price < 0) {
