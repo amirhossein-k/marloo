@@ -15,7 +15,7 @@ export interface DashboardProduct {
   price: number;
   count: number;
   countproduct: number;
-  priceOffer: number;
+  priceOffer?: number | null;
   published: boolean;
 }
 

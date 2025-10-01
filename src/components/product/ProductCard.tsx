@@ -81,10 +81,11 @@ export default function ProductCard({
             {product.priceOffer !== 0 && (
               <>
                 <span className="diagonal-line w-[45px] h-[2px] absolute bg-red-600 rotate-[0deg] right-2 top-[13px] inline-block"></span>
-                {calculatePercentage(
-                  product.priceOffer,
-                  product.price.toString()
-                ).toLocaleString()}
+                {product.priceOffer &&
+                  calculatePercentage(
+                    product.priceOffer,
+                    product.price.toString()
+                  ).toLocaleString()}
               </>
             )}
           </span>

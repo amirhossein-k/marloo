@@ -1,27 +1,14 @@
 // src\app\(public)\products\[id]\page.tsx
 import { notFound } from "next/navigation";
-import Link from "next/link";
 
-import Tabs from "@/components/TabsProduct/Tabs";
-import CurrentPath from "@/components/path/CurrentPath";
-import { calculatePercentage } from "@/utils/OfferMade";
-import { Rating, ThinStar } from "@smastrom/react-rating";
 import { FormattedPostType, PHOTO } from "@/types";
 import { GetProduct } from "@/app/actions/product/GetProductList";
-import ImagesProduct from "@/components/imageShow/ImagesProductID";
-import AddToCartButton from "@/components/product/AddToCartButton";
-import ColorSelector from "@/components/ModelAndColorSelector";
-import { Variant } from "@/types";
-import ModelAndColorSelector from "@/components/ModelAndColorSelector";
-import DigikalaPrice from "@/components/SearchSite/DigikalaPrice";
 import { Metadata } from "next";
 import Script from "next/script";
-import ProductPriceEdit from "@/components/Edit/ProductPriceEdit";
 import { getServerSession } from "next-auth";
 import ProductClient from "@/components/product/ProductClient";
 
 // دریافت محصول بر اساس `slug`
-import type { Colors } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 // ----------------------
 // دریافت اطلاعات محصول

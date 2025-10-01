@@ -72,7 +72,7 @@ export default function ConfirmationModalDashboardList({
     setPrice(String(p.price));
     setCount(p.count);
     setCountproduct(p.countproduct);
-    setPriceOffer(p.priceOffer);
+    setPriceOffer(p.priceOffer ?? 0);
     setCheckbox(p.published ? "انتشار" : "عدم انتشار");
     setImages(
       p.productImage.map((img) => ({

@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     }
 
     // دریافت اطلاعات کاربر از DB
-    const user: USERTYPE | null = await fetchUser(session.user.id);
+    const user = await fetchUser(session.user.id);
     if (!user) {
       return NextResponse.json({ error: 'کاربر یافت نشد' }, { status: 404 });
     }

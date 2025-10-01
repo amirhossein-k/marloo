@@ -37,7 +37,7 @@ type CartItemProduct = {
     id: string;
     title: string;
     priceWithProfit: number;
-    priceOffer: number
+    priceOffer: number | null
     colorSelected?: CartItemColor;  // 👈 رنگ انتخابی این محصول
 
     image?: string;  // productImage.map(item=>item.defaultImage ===true)[0].childImage

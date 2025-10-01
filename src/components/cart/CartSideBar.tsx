@@ -290,7 +290,7 @@ const CartSideBar = () => {
                 </p>
                 {/* بخش جدید نمایش قیمت */}
                 <div className="price flex items-center gap-2 my-1 text-xs">
-                  {item.product.priceOffer > 0 ? (
+                  {item.product.priceOffer && item.product.priceOffer > 0 ? (
                     <>
                       {/* قیمت اصلی با خط خوردگی */}
                       <del className="text-gray-400 text-[13px]">

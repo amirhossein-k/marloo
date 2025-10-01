@@ -15,7 +15,6 @@ import { LoadingProvider } from "@/context/LoadingContext";
 import LoadingOverlay from "@/components/product/LoadingOverlay";
 import NavbarButtom from "@/components/navbarButtom/NavbarButtom";
 import CartSideBar from "@/components/cart/CartSideBar";
-import CartWatcher from "@/components/cart/CartWatcher";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import NavbarComponents from "@/components/navbar/NavbarComponents";
 import Footer from "@/components/footer/Footer";

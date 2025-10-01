@@ -74,15 +74,15 @@ const NewProduct = ({ newproduct }: { newproduct: Product[] }) => {
                         dir="rtl"
                       >
                         <span>{item.title}</span>
-                        {item.priceOffer > 0 ? (
+                        {item.priceOffer && item.priceOffer > 0 ? (
                           <div className="flex gap-2">
                             {/* قیمت اصلی با خط خوردگی */}
                             <del className="text-gray-400 text-[13px]">
-                              {item.priceWithProfit.toLocaleString()} تومان
+                              {item.priceWithProfit?.toLocaleString()} تومان
                             </del>
                             {/* قیمت با تخفیف */}
                             <span className="text-green-600 font-bold text-[15px]">
-                              {item.priceOffer.toLocaleString()} تومان
+                              {item.priceOffer?.toLocaleString()} تومان
                             </span>
                             {/* برچسب درصد تخفیف */}
                             <span className="relative inline-flex items-center justify-center text-white text-[10px] h-[45px] w-[45px] ">
@@ -106,7 +106,7 @@ const NewProduct = ({ newproduct }: { newproduct: Product[] }) => {
                         ) : (
                           // اگر تخفیف نبود، فقط قیمت اصلی
                           <span className="text-gray-500 font-bold">
-                            {item.priceWithProfit.toLocaleString()} تومان
+                            {item.priceWithProfit?.toLocaleString()} تومان
                           </span>
                         )}
                       </div>
