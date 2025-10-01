@@ -3,11 +3,14 @@ import { db as prisma } from '@/app/lib/db'
 import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 
-export async function PATCH(req: Request,
+export async function PATCH(
+    req: NextRequest,
     context: { params: { id: string } }
 ) {
+
 
     try {
         // check admin
