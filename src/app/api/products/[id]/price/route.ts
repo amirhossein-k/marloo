@@ -4,11 +4,13 @@ import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import type from "next";
 
 
 export async function PATCH(
     req: NextRequest,
-    context: { params: Record<string, string> }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { params }: any
 ) {
 
     try {
@@ -19,7 +21,7 @@ export async function PATCH(
             return NextResponse.json({ error: true, success: false, message: 'ادمین نیستی شیطون بلا' }, { status: 401 })
         }
 
-        const { id } = context.params;
+        const { id } = params;
         const { price, priceOffer } = await req.json();
 
         if (typeof price !== 'number' || price < 0) {
