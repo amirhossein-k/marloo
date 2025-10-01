@@ -30,10 +30,12 @@ export async function GetProductDashboard({
 
         skip,
         take: limit,
-        include: { productImage: true, categoryList: true, listProperty: true, review: true },
+        include: { productImage: true, categoryList: true, listProperty: true, review: true, colors: true },
       }),
       prisma.product.count({ where }),
     ]);
+
+
 
     return { products, totalCount };
   } catch (error) {

@@ -7,6 +7,7 @@ import {
   GetProductDashboard,
   GetProductParams,
 } from "@/app/actions/dashboard/GetProductListDashboard";
+import type { Product } from "@/types";
 
 interface SearchParams {
   page?: string;
@@ -32,7 +33,10 @@ export default async function Listpage({
         لیست محصولات
       </div>
       <div className="body w-full">
-        <TablesProductsClient products={products} edit={edit || false} />
+        <TablesProductsClient
+          products={products as Product[]}
+          edit={edit || false}
+        />
       </div>
     </div>
   );
