@@ -5,9 +5,9 @@
 import { db as prisma } from "@/app/lib/db";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth"; // اگر auth داری
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Prisma } from "@prisma/client"; // ایمپورت Prisma برای دسترسی به enum
 import { CartItem } from "@/store/orderSlice";
+import { authOptions } from "@/lib/auth";
 // import type { CartItem } from "@/store/cartSlice"; // تایپ را از اسلایس ایمپورت می‌کنیم
 
 // اینترفیس ورودی برای افزودن محصول به سبد خرید

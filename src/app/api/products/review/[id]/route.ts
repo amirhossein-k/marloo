@@ -2,9 +2,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db as prisma } from '@/app/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'; // مسیر تنظیمات NextAuth
 import { USERTYPEPrisma } from '@/types';
 import { fetchUser, GetUser } from '@/app/actions/GetUser';
+import { authOptions } from '@/lib/auth';
 
 export async function DELETE(
   request: NextRequest,

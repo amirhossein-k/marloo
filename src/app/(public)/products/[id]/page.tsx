@@ -18,11 +18,11 @@ import { Metadata } from "next";
 import Script from "next/script";
 import ProductPriceEdit from "@/components/Edit/ProductPriceEdit";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import ProductClient from "@/components/product/ProductClient";
 
 // دریافت محصول بر اساس `slug`
 import type { Colors } from "@prisma/client";
+import { authOptions } from "@/lib/auth";
 // ----------------------
 // دریافت اطلاعات محصول
 // ----------------------

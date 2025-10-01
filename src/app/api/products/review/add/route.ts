@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { db as prisma } from '@/app/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { fetchUser, USERTYPE } from '@/app/actions/GetUser';
+import { authOptions } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {

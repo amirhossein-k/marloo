@@ -1,6 +1,6 @@
 // src\app\api\products\[id]\price\route.ts
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { db as prisma } from '@/app/lib/db'
+import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 

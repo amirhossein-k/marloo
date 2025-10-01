@@ -2,10 +2,10 @@
 
 import { db as prisma } from '@/app/lib/db'
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { GetProduct } from '@/app/actions/product/GetProductList';
+import { authOptions } from '@/lib/auth';
 
 export async function DELETE(req: Request,
     { params }: { params: { id: string } }
