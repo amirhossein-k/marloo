@@ -8,7 +8,8 @@ import { GetProduct } from '@/app/actions/product/GetProductList';
 import { authOptions } from '@/lib/auth';
 
 export async function DELETE(req: Request,
-    { params }: { params: { id: string } }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { params }: any
 ) {
     try {
 

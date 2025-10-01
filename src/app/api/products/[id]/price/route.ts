@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import type from "next";
+
 
 
 export async function PATCH(
