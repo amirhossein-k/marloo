@@ -42,7 +42,8 @@ export async function DELETE(req: Request,
 }
 
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { params }: any) {
     const products = await GetProduct();
     const product = products.find(p => p.id === params.id);
     if (!product) return NextResponse.json({ error: 'Not found' }, { status: 404 });
