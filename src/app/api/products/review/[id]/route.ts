@@ -8,7 +8,8 @@ import { authOptions } from '@/lib/auth';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  { params }: any
 ) {
   try {
     const reviewId = params.id;
