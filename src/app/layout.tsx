@@ -59,18 +59,21 @@ export default function RootLayout({
       >
         <Providers>
           <LoadingProvider>
-            {/* loading & pathname for navButtom */}
             <LoadingOverlay />
             <Toaster position="top-center" />
             <NavbarComponents />
             <CartSideBar />
-            <div className=" w-fit  absolute right-0 top-0" dir="rtl">
+            <div className="w-fit absolute right-0 top-0" dir="rtl">
               <Sidebar />
             </div>
-            <main className="p-0 ">{children}</main>
-            <footer>
-              <Footer />
-            </footer>
+
+            {/* تغییر اینجا 👇 */}
+            <div className="flex flex-col min-h-screen">
+              <main className="flex-grow">{children}</main>
+              <footer>
+                <Footer />
+              </footer>
+            </div>
 
             <NavbarButtom />
           </LoadingProvider>
