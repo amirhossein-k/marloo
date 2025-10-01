@@ -21,6 +21,7 @@ export async function GetProductList(): Promise<Product[]> {
                 listProperty: true,
                 review: true,
 
+
             },
         })
         return listProduct

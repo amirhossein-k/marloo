@@ -61,11 +61,11 @@ export interface Product {
   title: string
   published: boolean
   price: number
-  priceWithProfit: number
+  priceWithProfit?: number | null
   count: number
   colors: Colors[]
   countproduct: number
-  priceOffer: number
+  priceOffer?: number | null
   author?: USERTYPE
   authorId: string
   createdAt: Date

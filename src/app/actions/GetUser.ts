@@ -27,14 +27,14 @@ export type USERTYPE = Prisma.UserGetPayload<{
     };
 }>;
 
-export async function fetchUser(id: string): Promise<USERTYPE | null> {
+export async function fetchUser(id: string) {
     try {
         const user = await prisma.user.findUnique({
             where: { id },
             include: {
                 products: { include: { productImage: true, categoryList: true, review: true, listProperty: true } },
                 address: true,
-                listordershop: { include: { order: true, variant: true } }
+                listordershop: { include: { InvoiceOwner: true, variant: true } }
             }
         });
         return user;
