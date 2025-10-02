@@ -20,6 +20,7 @@ import FeaturesSection from "./FeaturesSection";
 import BannerTwo from "./BannerTwo";
 import BannerSlider from "./BannerTwo";
 import GIfHome from "./GIfHome";
+import IncredibleOffersPage from "./offer/IncredibleOffersPage";
 
 // import HeroSlider from "@/components/Home/HeroSlider";
 // ✅ Dynamically import HeroSlider with SSR turned off
@@ -79,12 +80,10 @@ export default function HomeClient({
         <BannerSlider />
         <NewProduct newproduct={newProducts} />
       </div>
-      <section
-        // className="container mx-auto right-[2px] top-10 bg-red-300  relative"
-        className="container mx-auto px-4 w-full max-w-full mb-8"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-right">محصولات ویژه</h2>
-        <p className="text-right">اینجا بقیه محتوا میاد ...</p>
+      <section className="container mx-auto px-4 w-full max-w-full mb-8">
+        {/* <h2 className="text-2xl font-bold mb-6 text-right">محصولات ویژه</h2>
+        <p className="text-right">اینجا بقیه محتوا میاد ...</p> */}
+        <IncredibleOffersPage />
       </section>
     </div>
   );
