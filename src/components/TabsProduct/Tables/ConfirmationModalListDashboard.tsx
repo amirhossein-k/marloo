@@ -63,6 +63,9 @@ export default function ConfirmationModalDashboardList({
 
   const [error, setError] = useState("");
 
+  const [discountDaysLeft, setDiscountDaysLeft] = useState(0);
+  const [discountEndDate, setDiscountEndDate] = useState("");
+
   useEffect(() => {
     if (!id) return;
     const p = products.find((prod) => prod.id === id);
@@ -96,6 +99,15 @@ export default function ConfirmationModalDashboardList({
     setSelectedCategories(p.categoryList?.map((cat) => cat.category) || []);
     setSelectedVariantId(p.productVariants?.map((v) => v.variantId) || []);
     setHtml(p.content || "");
+    // اضافه کردن مقداردهی stateهای جدید
+    setDiscountDaysLeft(p.discountDaysLeft || 0);
+    setDiscountEndDate(
+      p.discountEndDate
+        ? typeof p.discountEndDate === "string"
+          ? p.discountEndDate
+          : p.discountEndDate.toISOString()
+        : ""
+    );
   }, [id, products]);
 
   // / به‌روزرسانی tableData بر اساس تعداد ردیف‌ها و ستون‌ها
@@ -137,6 +149,8 @@ export default function ConfirmationModalDashboardList({
       count,
       countproduct,
       priceOffer,
+      discountDaysLeft, // اضافه کردن به payload
+      discountEndDate, // اضافه کردن به payload
       checkbox,
       detailImage,
       imageDefult: selectedImageId
@@ -206,6 +220,10 @@ export default function ConfirmationModalDashboardList({
               setCountproduct={setCountproduct}
               checkbox={checkbox}
               setCheckbox={setCheckbox}
+              discountDaysLeft={discountDaysLeft}
+              setDiscountDaysLeft={setDiscountDaysLeft}
+              discountEndDate={discountEndDate}
+              setDiscountEndDate={setDiscountEndDate}
             />
 
             {/* آپلود عکس */}
