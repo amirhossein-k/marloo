@@ -64,6 +64,13 @@ export default function AddProduct() {
 
   const [selectedSupplierId, setSelectedSupplierId] = useState<string>("");
 
+  // فیلدهای جدید برای تخفیف
+  const [discountDaysLeft, setDiscountDaysLeft] = useState<number>(7); // مقدار پیش‌فرض 7 روز
+  const [discountEndDate, setDiscountEndDate] = useState<string>(
+    // مقدار پیش‌فرض 7 روز بعد
+    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)
+  );
+
   // بعد از گرفتن لیست تامین‌کننده‌ها
 
   // استفاده از react-query برای گرفتن تامین‌کننده‌ها
@@ -107,6 +114,8 @@ export default function AddProduct() {
     // 2. اگر جدول وجود دارد، فقط همین قسمت را نگه دار
 
     const fullContenttt = tableHTML ? `${html}<br>${tableHTML}` : html;
+    // تبدیل discountEndDate به DateTime برای Prisma
+    const discountEndDateObj = new Date(discountEndDate);
 
     const payload = {
       name,
@@ -127,6 +136,9 @@ export default function AddProduct() {
       detailImage,
       supplierId: selectedSupplierId,
       colors,
+      // اضافه کردن فیلدهای جدید
+      discountDaysLeft,
+      discountEndDate: discountEndDateObj,
     };
     console.log(payload, "payload");
 
@@ -256,6 +268,10 @@ export default function AddProduct() {
           setCountproduct={setCountproduct}
           checkbox={checkbox} // اضافه شد
           setCheckbox={setCheckbox} // اضافه شد
+          discountDaysLeft={discountDaysLeft}
+          setDiscountDaysLeft={setDiscountDaysLeft}
+          discountEndDate={discountEndDate}
+          setDiscountEndDate={setDiscountEndDate}
         />
 
         {/* آپلود عکس */}

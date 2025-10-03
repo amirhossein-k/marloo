@@ -36,6 +36,9 @@ export default async function Home() {
     GetNewProducts(), // محصولات جدید
   ]);
 
+  // زمان سرور را اینجا بگیرید
+  const serverTime = new Date();
+
   await queryClient.prefetchQuery({
     queryKey: ["product"],
     queryFn: async () => allProducts,
@@ -54,6 +57,7 @@ export default async function Home() {
       <HomeClient
         initialProducts={allProducts}
         initialNewProducts={newProducts}
+        serverTime={serverTime} // پاس دادن زمان سرور
       />
     </HydrationBoundary>
   );

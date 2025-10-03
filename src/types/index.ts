@@ -76,6 +76,21 @@ export interface Product {
   tags: string[]
   productVariants?: ProductVariant[]   // 👈 رابطه جدید
   tableContent: string | null
+  discountDaysLeft?: number | null;
+  discountEndDate?: Date | null;
+  // فیلدهای مربوط به supplier
+  // lastUpdatedBySupplier?: Date;
+  // supplierId?: string;
+  // supplier?: Supplier;
+
+}
+export interface Supplier {
+  id: string;
+  name: string;
+  phoneNumber: string;
+  address?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 export interface ProductVariant {
   id: string
@@ -210,6 +225,8 @@ export type ProductWithRelations = Prisma.ProductGetPayload<{
         };
       };
     };
+    discountDaysLeft: true;
+    discountEndDate: true;
   };
 }>;
 

@@ -147,6 +147,9 @@ model Product {
   lastUpdatedBySupplier DateTime?
   supplier              Supplier? @relation("supplierProducts", fields: [supplierId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   supplierId            String?   @db.ObjectId
+
+  discountDaysLeft Float?
+  discountEndDate  DateTime?
 }
 
 model Supplier {

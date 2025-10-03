@@ -12,7 +12,7 @@ function formatToGregorianDate(date: Date): string {
 
 export async function GetProductList(): Promise<Product[]> {
     try {
-        const listProduct: Product[] = await prisma.product.findMany({
+        const listProduct = await prisma.product.findMany({
             orderBy: { createdAt: 'desc' },
             include: {
                 colors: true,
@@ -22,9 +22,12 @@ export async function GetProductList(): Promise<Product[]> {
                 review: true,
 
 
+
+
+
             },
         })
-        return listProduct
+        return listProduct as unknown as Product[]
     } catch (error) {
         console.error("❌ error get listProduct:", error)
         return []
@@ -51,7 +54,15 @@ export async function GetNewProducts(): Promise<Product[]> {
             },
         })
 
-        return newProducts
+        // تبدیل از Prisma type به Product type
+        return newProducts.map(product => ({
+            ...product,
+            // تبدیل مقادیر null به undefined اگر نیاز دارید
+            discountDaysLeft: product.discountDaysLeft ?? undefined,
+            discountEndDate: product.discountEndDate ?? undefined,
+
+        })) as Product[]
+
     } catch (error) {
         console.error("❌ error get new products:", error)
         return []

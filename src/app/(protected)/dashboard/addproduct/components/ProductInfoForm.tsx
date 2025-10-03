@@ -16,6 +16,10 @@ interface Props {
   setCountproduct: (v: number) => void;
   checkbox: string;
   setCheckbox: (v: string) => void;
+  discountDaysLeft: number;
+  setDiscountDaysLeft: (v: number) => void;
+  discountEndDate: string;
+  setDiscountEndDate: (v: string) => void;
 }
 
 const ProductInfoForm = ({
@@ -33,6 +37,10 @@ const ProductInfoForm = ({
   setCountproduct,
   checkbox,
   setCheckbox,
+  discountDaysLeft,
+  setDiscountDaysLeft,
+  discountEndDate,
+  setDiscountEndDate,
 }: Props) => {
   return (
     <div className="space-y-4">
@@ -66,14 +74,31 @@ const ProductInfoForm = ({
         />
       </div>
 
+      {/* فیلدهای جدید برای تخفیف */}
+      <div>
+        <label className="block mb-1">تعداد روزهای تخفیف:</label>
+        <input
+          type="number"
+          value={discountDaysLeft}
+          onChange={(e) => setDiscountDaysLeft(Number(e.target.value))}
+          className="w-full p-2 border rounded"
+          min="1"
+          max="365"
+          placeholder="مثلاً 7 برای یک هفته"
+        />
+      </div>
+
       <div>
         <label className="block mb-1">تاریخ پایان تخفیف:</label>
         <input
-          type="text"
-          value={dateOffer}
-          onChange={(e) => setDateOffer(e.target.value)}
+          type="datetime-local"
+          value={discountEndDate}
+          onChange={(e) => setDiscountEndDate(e.target.value)}
           className="w-full p-2 border rounded"
         />
+        <small className="text-gray-500">
+          تاریخ و زمان پایان دوره تخفیف را انتخاب کنید
+        </small>
       </div>
 
       <div>

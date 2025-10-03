@@ -30,6 +30,8 @@ interface ProductRequest {
   selectedVariantId: string[]
   supplierId: string
   colors: Colors[]
+  discountDaysLeft: number;
+  discountEndDate: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -40,7 +42,7 @@ export async function POST(request: NextRequest) {
     })
 
     const requestData: ProductRequest = await request.json();
-    const { name, price, html, checkbox, tableContent, detailImage, imageDefult, selectedImageId, count, countproduct, priceOffer, category, tags, selectedVariantId, supplierId, colors } = requestData;
+    const { name, price, html, checkbox, tableContent, detailImage, imageDefult, selectedImageId, count, countproduct, priceOffer, category, tags, selectedVariantId, supplierId, colors, discountDaysLeft, discountEndDate } = requestData;
     // eslint-disable-next-line prefer-const
     let checkedit = checkbox === "انتشار";
     console.log('haaaaaaaaaaa')
@@ -91,6 +93,7 @@ export async function POST(request: NextRequest) {
         tags,
         // selectedVariantId: selectedVariantId || null, // ← اینجا اضافه شد
         supplierId: "68a88379c8f4ab7244b76bd1", // 🔥 مهم
+        discountDaysLeft, discountEndDate
 
 
 
