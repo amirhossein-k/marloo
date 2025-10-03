@@ -13,7 +13,7 @@ import SliderComponent from "@/components/Home/Simple";
 import { Product, Slide } from "@/types";
 import { SwiperOptions } from "swiper/types";
 import Image from "next/image";
-import { slides, slides2 } from "@/data/Slide";
+import { slides, slides2, slideThree } from "@/data/Slide";
 import { useQuery } from "@tanstack/react-query";
 import NewProduct from "./NewProduct";
 import FeaturesSection from "./FeaturesSection";
@@ -22,6 +22,7 @@ import BannerSlider from "./BannerTwo";
 import GIfHome from "./GIfHome";
 import IncredibleOffersPage from "./offer/IncredibleOffersPage";
 import { Suspense } from "react"; // اضافه کردن Suspense
+import BannerThree from "./BannerThree";
 // import HeroSlider from "@/components/Home/HeroSlider";
 // ✅ Dynamically import HeroSlider with SSR turned off
 
@@ -146,6 +147,18 @@ export default function HomeClient({
           serverTime={serverTime}
         />
         {/* </Suspense> */}
+
+        <div className="w-full max-w-full overflow-hidden">
+          <BannerThree
+            Slide={slideThree}
+            mobileHeight="h-[300px]"
+            tabletHeight="h-[300px]"
+            desktopHeight="h-[550px]"
+            objectFitMobile="cover"
+            objectFitDesktop="contain"
+            // aspectRatio="aspect-[14/7]"
+          />{" "}
+        </div>
       </section>
     </div>
   );

@@ -219,3 +219,11 @@ export const slidetwo: Slide[] = [
     ),
   },
 ];
+export const slideThree = [
+  {
+    id: "s1",
+    title: "Fashion sale for Children's",
+    img: "https://c589564.parspack.net/c589564/uploads/qhab/4b62628ad33e6b39d6f0094e47f11923a618268b_1755584575.gif", // جایگزین کن یا آدرس اینترنتی قرار بده
+    align: "left",
+  },
+];
