@@ -3,12 +3,21 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 import { sidebarData } from "./sidebar-data";
+import { useDispatch } from "react-redux";
+import { SliderProps } from "@radix-ui/react-slider";
 
-const Sidebar = () => {
+interface SidebarProps {
+  mobile: boolean;
+}
+
+const Sidebar = ({ mobile }: SidebarProps) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   // State برای مدیریت باز و بسته بودن منوهای آکاردئونی
   const [openCategories, setOpenCategories] = useState<string[]>(["cake"]); // کیک به صورت پیش‌فرض باز است
 
@@ -30,7 +39,9 @@ const Sidebar = () => {
   return (
     <aside
       // className="hidden md:flex w-64 min-h-screen h-screen bg-gray-800 text-gray-300 flex-col fixed"
-      className="hidden md:flex w-64 bg-gray-800 text-gray-300 flex-col sticky top-0 h-screen overflow-y-auto"
+      className={`${
+        mobile ? " md:hidden flex w-[100%]" : "hidden md:flex w-64 h-screen"
+      }   bg-gray-800 text-gray-300 flex-col sticky top-0  overflow-y-auto py-2`}
       dir="rtl"
     >
       <div

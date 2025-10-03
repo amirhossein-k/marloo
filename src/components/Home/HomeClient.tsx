@@ -152,12 +152,11 @@ export default function HomeClient({
           <BannerThree
             Slide={slideThree}
             mobileHeight="h-[300px]"
-            tabletHeight="h-[300px]"
-            desktopHeight="h-[550px]"
-            objectFitMobile="cover"
+            tabletHeight="sm:h-[400px]" // بهتر است از sm یا md استفاده کنید
+            desktopHeight="lg:h-[420px]" // بهتر است از lg استفاده کنید
+            objectFitMobile="contain" // ✅ این خط اصلاح شد
             objectFitDesktop="contain"
-            // aspectRatio="aspect-[14/7]"
-          />{" "}
+          />
         </div>
       </section>
     </div>

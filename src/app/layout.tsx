@@ -98,7 +98,7 @@ export default function RootLayout({
                 </main>
                 {/* سایدبار */}
                 <div className="hidden md:block flex-shrink-0">
-                  <Sidebar />
+                  <Sidebar mobile={false} />
                 </div>
               </div>
               {/* کارت سایدبار */}

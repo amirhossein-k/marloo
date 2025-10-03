@@ -307,3 +307,7 @@ footer {
 .animate-pulse-slow {
   animation: pulse 2s infinite;
 }
+/*  */
+.swiper-slide .swiper-slide-active {
+  padding: 0 !important;
+}

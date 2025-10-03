@@ -11,6 +11,7 @@ import NavbarDesktopComponents from "./NavbarDesktopComponents";
 import { useEffect, useState } from "react";
 import useWindowSize from "@/hooks/size";
 import Link from "next/link";
+import NavbarMobileTwoComponents from "./NavbarMobileTwoComponents";
 
 export default function NavbarComponents() {
   const dispatch = useDispatch();
@@ -35,12 +36,10 @@ export default function NavbarComponents() {
         openNav ? "" : "   md:w-[calc(100vw-269px)]"
       } `}
     >
-      <div
-        className={`${width && width > metr ? "bg-red-400" : "bg-blue-400"}`}
-      >
+      <div className={`${width && width > metr ? "bg-red-400" : "p-2"}`}>
         <button
           onClick={toggleNav}
-          className={`text-2xl lg:text-4xl md:text-3xl ${
+          className={`text-3xl lg:text-4xl md:text-3xl ${
             width && width > metr ? "hidden" : "block"
           }`}
         >
@@ -53,9 +52,10 @@ export default function NavbarComponents() {
       </div> */}
 
       {/* مثال ساده: منو وقتی باز است */}
-      {openNav && (
-        <div className="w-full absolute top-0 right-0 h-full z-50" dir="rtl">
-          <NavbarMobileComponents metr={metr} mobile={mobile} />
+      {openNav && mobile && (
+        <div className="fixed inset-0 z-50 " dir="rtl">
+          {/* <NavbarMobileComponents metr={metr} mobile={mobile} /> */}
+          <NavbarMobileTwoComponents metr={metr} mobile={mobile} />
         </div>
       )}
       {width && width < metr ? (
