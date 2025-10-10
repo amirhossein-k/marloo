@@ -3,15 +3,17 @@
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
-import { setOpenNav } from "@/store/navbarSlice";
+import { setLoadingNav, setOpenNav } from "@/store/navbarSlice";
 import { TiThMenu } from "react-icons/ti";
 import { FaAngleLeft } from "react-icons/fa";
 import NavbarMobileComponents from "./NavbarMobileComponents";
 import NavbarDesktopComponents from "./NavbarDesktopComponents";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import useWindowSize from "@/hooks/size";
 import Link from "next/link";
 import NavbarMobileTwoComponents from "./NavbarMobileTwoComponents";
+import { useRouter } from "next/navigation";
+import { useLoading } from "@/context/LoadingContext";
 
 export default function NavbarComponents() {
   const dispatch = useDispatch();
@@ -19,7 +21,9 @@ export default function NavbarComponents() {
   const [metr] = useState(768);
   const [mobile, setMobile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { setIsLoading } = useLoading();
 
+  const router = useRouter();
   const openNav = useSelector((state: RootState) => state.navbar.openNav);
   useEffect(() => {
     if (width) {
@@ -28,6 +32,13 @@ export default function NavbarComponents() {
   }, [width, metr]);
   const toggleNav = () => {
     dispatch(setOpenNav(!openNav));
+  };
+
+  const handlePush = (url: string) => {
+    setIsLoading(true); // 👈 قبل از ناوبری
+    startTransition(() => {
+      router.push(url);
+    });
   };
 
   return (
@@ -59,45 +70,54 @@ export default function NavbarComponents() {
         </div>
       )}
       {width && width < metr ? (
-        <div
-          className="flex items-center gap-4 justify-around  w-full p-4 h-[50px] bg-gray-100 shadow"
-          dir="rtl"
-        >
-          <Link
-            href="/"
-            className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
+        <div className="  flex w-full" dir="rtl">
+          <div
+            className="flex items-center gap-4 justify-around  w-full p-4 h-[50px] bg-gray-100 shadow"
+            dir="rtl"
           >
-            خانه
-          </Link>
-          <Link
-            href="/about"
-            className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
-          >
-            درباره ما
-          </Link>
-          <Link
-            href="/products/list"
-            className=" font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
-          >
-            محصولات
-          </Link>
+            <Link
+              href="/"
+              onClick={() => handlePush("/")}
+              className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
+            >
+              خانه
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => handlePush("/contact")}
+              className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
+            >
+              درباره ما
+            </Link>
+            <Link
+              onClick={() => handlePush("/products/list")}
+              href="/products/list"
+              className=" font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
+            >
+              محصولات
+            </Link>
+          </div>
+          <NavbarDesktopComponents />
         </div>
       ) : (
         <div className="  flex w-full" dir="rtl">
           <div className="flex items-center gap-4 justify-around bg-gray-100 shadow w-full">
             <Link
               href="/"
+              onClick={() => handlePush("/")}
               className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
             >
               خانه
             </Link>
             <Link
-              href="/about"
+              href="/contact"
+              onClick={() => handlePush("/contact")}
               className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
             >
               درباره ما
             </Link>
             <Link
+              onClick={() => handlePush("/products/list")}
               href="/products/list"
               className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
             >

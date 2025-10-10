@@ -77,6 +77,7 @@ export default function HomeClient({
         hasDiscount && isDiscountValid && hasDiscountInfo && isDiscountActive
       );
     }) || [];
+  console.log("discountedProducts from query:", discountedProducts);
 
   // نمایش loading عمومی اگر داده‌ها در حال بارگذاری هستند
   if (productsLoading || newProductsLoading) {

@@ -44,8 +44,12 @@ export default function SearchProductNav({
     }
   };
   // فقط در صفحات اصلی و لیست محصولات نمایش بده
-  const shouldShow = pathname === "/" || pathname.startsWith("/products");
-  if (!shouldShow) return null;
+  // const shouldShow = pathname === "/" || pathname.startsWith("/products");
+  // if (!shouldShow) return null;
+  ////////
+  // const hideOn = ["/login", "/register", "/cart"];
+  // const shouldShow = !hideOn.includes(pathname);
+  // if (!shouldShow) return null;
   return (
     <nav
       className="relative w-full flex items-center justify-between p-4 bg-gray-100 shadow"

@@ -59,8 +59,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, serverTime }) => {
         {/* قیمت‌ها */}
         <div className="flex items-center space-x-2 space-x-reverse mb-3">
           <span className="text-lg font-bold text-gray-800">
-            {product.priceOffer?.toLocaleString() ??
-              product.price.toLocaleString()}
+            {product.priceOffer?.toLocaleString()
+              ? (
+                  ((product.priceWithProfit ?? 0 / 100) * 90) /
+                  100
+                ).toLocaleString()
+              : product.priceWithProfit?.toLocaleString()}
             تومان
           </span>
           <span className="text-sm text-gray-500 line-through">

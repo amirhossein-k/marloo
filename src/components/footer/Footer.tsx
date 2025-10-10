@@ -41,7 +41,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="#"
+                href="/rules"
                 className="hover:text-blue-600 transition-colors duration-200 block py-1"
               >
                 قوانین و مقررات
@@ -49,7 +49,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="#"
+                href="/privacy-policy"
                 className="hover:text-blue-600 transition-colors duration-200 block py-1"
               >
                 سیاست حریم خصوصی
@@ -64,7 +64,7 @@ const Footer = () => {
           <ul className="space-y-2 text-sm">
             <li>
               <Link
-                href="#"
+                href="/faq"
                 className="hover:text-blue-600 transition-colors duration-200 block py-1"
               >
                 پرسش‌های متداول
@@ -72,7 +72,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="#"
+                href="/contact"
                 className="hover:text-blue-600 transition-colors duration-200 block py-1"
               >
                 تماس با ما

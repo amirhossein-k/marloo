@@ -22,7 +22,12 @@ const NewProduct = ({ newproduct }: { newproduct: Product[] }) => {
         openNav ? "" : "   md:w-[calc(100vw-269px)]"
       }  rounded-md overflow-hidden px-2  `}
     >
-      <div className="container mx-auto  h-full  rounded-md ">
+      <div className="container mx-auto  h-full  rounded-md my-3 shadow-custom2">
+        <div className="justify-around mb-8  flex">
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">
+            محصولات جدید رسید
+          </h1>
+        </div>
         <div className="flex flex-wrap -mx-2 ">
           {/* بخش اسلایدر */}
           <div className={`w-full     px-2 rounded-md overflow-hidden `}>
