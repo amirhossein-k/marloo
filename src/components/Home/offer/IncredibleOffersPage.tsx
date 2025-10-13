@@ -30,7 +30,7 @@ const IncredibleOffersPage: React.FC<IncredibleOffersPageProps> = ({
   // اگر محصولی نداریم، loading نمایش دهید
   if (!loading && (!products || products.length === 0)) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className=" mx-auto px-4 py-8">
         <div className="text-center">
           <p className="text-gray-500">هیچ محصول تخفیف‌داری موجود نیست.</p>
         </div>
@@ -40,7 +40,7 @@ const IncredibleOffersPage: React.FC<IncredibleOffersPageProps> = ({
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className=" mx-auto px-4 py-8">
         <div className="text-center">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
@@ -61,7 +61,7 @@ const IncredibleOffersPage: React.FC<IncredibleOffersPageProps> = ({
 
   return (
     <div
-      className="container mx-auto px-4 py-8 shadow-custom2 rounded-md"
+      className=" mx-auto px-4 py-8 shadow-custom2 rounded-md w-full"
       dir="rtl"
     >
       {/* هدر صفحه */}
@@ -75,7 +75,7 @@ const IncredibleOffersPage: React.FC<IncredibleOffersPageProps> = ({
       </div>
 
       {/* لیست محصولات */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
           <ProductCard
             key={product.id}

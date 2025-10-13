@@ -106,7 +106,7 @@ export default function HomeClient({
   return (
     <div
       className={`flex-1  w-full max-w-full  overflow-x-hidden overflow-y-hidden h-full ${
-        openNav ? "" : "   md:w-[calc(100vw-269px)]"
+        openNav ? "" : "   lg:w-[calc(100vw-269px)]"
       } `}
     >
       {/* 🔹 بخش اول (Hero Slider) */}
@@ -132,7 +132,7 @@ export default function HomeClient({
         <BannerSlider />
         <NewProduct newproduct={newProducts} />
       </div>
-      <section className="container mx-auto px-4 w-full max-w-full mb-8">
+      <section className=" mx-auto px-2 w-full max-w-full mb-8">
         {/* <h2 className="text-2xl font-bold mb-6 text-right">محصولات ویژه</h2>
         <p className="text-right">اینجا بقیه محتوا میاد ...</p> */}
         {/* Wrap async component در Suspense */}

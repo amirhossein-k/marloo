@@ -25,7 +25,7 @@ const Footer = () => {
           <ul className="space-y-2 text-sm">
             <li>
               <Link
-                href="#"
+                href="/profile"
                 className="hover:text-blue-600 transition-colors duration-200 block py-1"
               >
                 حساب کاربری

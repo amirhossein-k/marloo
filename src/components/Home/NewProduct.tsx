@@ -19,10 +19,10 @@ const NewProduct = ({ newproduct }: { newproduct: Product[] }) => {
   return (
     <div
       className={`  ${
-        openNav ? "" : "   md:w-[calc(100vw-269px)]"
+        openNav ? "" : "   lg:w-[calc(100vw-269px)]"
       }  rounded-md overflow-hidden px-2  `}
     >
-      <div className="container mx-auto  h-full  rounded-md my-3 shadow-custom2">
+      <div className=" mx-auto  h-full  rounded-md my-3 shadow-custom2">
         <div className="justify-around mb-8  flex">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">
             محصولات جدید رسید

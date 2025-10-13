@@ -44,10 +44,10 @@ const BannerThree: React.FC<propsSlider> = ({
   return (
     <div
       className={`${
-        openNav ? "" : "md:w-[calc(100vw-269px)]"
+        openNav ? "" : "lg:w-[calc(100vw-269px)]"
       } overflow-hidden  rounded-md px-2 `}
     >
-      <div className="container mx-auto">
+      <div className=" mx-auto">
         <div
           className={`wrelative w-full ${heightClass} overflow-hidden rounded-md`}
         >

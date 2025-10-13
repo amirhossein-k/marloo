@@ -31,7 +31,7 @@ export default function BannerSlider() {
   return (
     <div
       className={`  ${
-        openNav ? "" : "   md:w-[calc(100vw-269px)]"
+        openNav ? "" : "   lg:w-[calc(100vw-269px)]"
       }  rounded-md overflow-hidden px-2  `}
     >
       <div className="relative w-full h-[70vh] md:h-[60vh] lg:h-[500px] overflow-hidden rounded-md">

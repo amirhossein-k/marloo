@@ -219,6 +219,27 @@ const CartSideBar = () => {
       </div>
     );
   }
+
+  // ✅ خطا
+  // if (isError) {
+  //   return (
+  //     <div className="w-full fixed top-0 left-0 z-50 md:w-96 bg-white shadow-lg rounded-xl flex flex-col h-full justify-center items-center p-4 text-center">
+  //       <p className="text-red-600 font-semibold mb-2">
+  //         خطا در بارگذاری سبد خرید
+  //       </p>
+  //       <p className="text-gray-500 text-sm mb-4">
+  //         لطفاً اتصال اینترنت خود را بررسی کنید یا دوباره تلاش کنید.
+  //       </p>
+  //       <button
+  //         onClick={() => queryClient.invalidateQueries({ queryKey: ["cart"] })}
+  //         className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+  //       >
+  //         تلاش مجدد
+  //       </button>
+  //     </div>
+  //   );
+  // }
+
   return OpenCart ? (
     <div
       className="w-full fixed top-0 left-0 z-50 md:w-96 bg-white shadow-lg rounded-xl flex flex-col h-full"

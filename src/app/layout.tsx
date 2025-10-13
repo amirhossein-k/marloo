@@ -56,26 +56,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-x-hidden`}
       >
-        {/* <Providers>
-          <LoadingProvider>
-            <LoadingOverlay />
-            <Toaster position="top-center" />
-            <NavbarComponents />
-            <CartSideBar />
-            <div className="w-fit absolute right-0 top-0" dir="rtl">
-              <Sidebar />
-            </div>
-
-            <div className="flex flex-col min-h-screen">
-              <main className="flex-grow">{children}</main>
-              <footer>
-                <Footer />
-              </footer>
-            </div>
-
-            <NavbarButtom />
-          </LoadingProvider>
-        </Providers> */}
         <Providers>
           <LoadingProvider>
             <LoadingOverlay />
@@ -97,7 +77,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 {/* سایدبار */}
-                <div className="hidden md:block flex-shrink-0">
+                <div className="hidden lg:block flex-shrink-0">
                   <Sidebar mobile={false} />
                 </div>
               </div>

@@ -44,7 +44,7 @@ export default function NavbarComponents() {
   return (
     <nav
       className={`nav flex justify-between items-center py-4 px-3 bg-gray-100 ${
-        openNav ? "" : "   md:w-[calc(100vw-269px)]"
+        openNav ? "" : "   lg:w-[calc(100vw-269px)]"
       } `}
     >
       <div className={`${width && width > metr ? "bg-red-400" : "p-2"}`}>

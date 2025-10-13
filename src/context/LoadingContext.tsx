@@ -1,3 +1,4 @@
+// src\context\LoadingContext.tsx
 "use client";
 import { RootState } from "@/store";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -10,6 +11,8 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartOpen } from "@/store/orderSlice";
+import { useWindowSizeProfile } from "@/hooks/sizeProfile";
+import { useSelectedLayoutSegments } from "next/navigation";
 
 interface LoadingContextType {
   isLoading: boolean;
@@ -17,6 +20,7 @@ interface LoadingContextType {
   isLoadingProduct: boolean;
   setIsLoadingProduct: (value: boolean) => void;
   pathnamee: string;
+  width: number | null; // 👈 اضافه شد
 }
 
 // اینترفیس تغییر می‌کند تا تابع startTransition را شامل شود
@@ -40,6 +44,7 @@ export const LoadingProvider = ({
   const { OpenCart } = useSelector((state: RootState) => state.orderShop);
   const dispatch = useDispatch();
   const searchParams = useSearchParams(); // 👈 قلاب جدید برای خواندن پارامترها
+  const { width } = useWindowSizeProfile(); // 👈 استفاده از هوک اندازه صفحه
 
   // const [isPending, startTransition] = useTransition();
 
@@ -57,10 +62,10 @@ export const LoadingProvider = ({
     // 👆============================================👆
 
     // این منطق هم برای بستن سبد خرید هنگام تغییر صفحه، درست است و باقی می‌ماند
-    if (OpenCart) {
-      dispatch(setCartOpen(false));
-    }
-  }, [pathname, dispatch, searchParams]);
+    // if (OpenCart) {
+    //   dispatch(setCartOpen(false)); // بستن سبد خرید در تغییر صفحه
+    // }
+  }, [pathname, dispatch, searchParams, OpenCart]);
 
   // const value = {
   //   isLoadingProduct: isPending, // 👈 وضعیت لودینگ مستقیماً از isPending گرفته می‌شود
@@ -77,6 +82,7 @@ export const LoadingProvider = ({
         isLoadingProduct,
         setIsLoadingProduct,
         pathnamee,
+        width, // 👈 مقدار عرض صفحه در context
       }}
       // value={value}
     >

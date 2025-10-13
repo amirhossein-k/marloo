@@ -45,10 +45,10 @@ const SliderComponent = ({
   return (
     <div
       className={`  ${
-        openNav ? "" : "   md:w-[calc(100vw-269px)]"
+        openNav ? "" : "   lg:w-[calc(100vw-269px)]"
       }  rounded-md overflow-hidden px-2 `}
     >
-      <div className="container mx-auto  h-full  rounded-md ">
+      <div className=" mx-auto  h-full  rounded-md ">
         <div className="flex flex-wrap -mx-2 ">
           {/* بخش اسلایدر */}
           <div
