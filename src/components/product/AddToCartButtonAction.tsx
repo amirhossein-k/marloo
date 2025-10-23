@@ -36,8 +36,9 @@ const AddToCartButtonActions = ({
         const item = res.data;
         const product = {
           id: item.product.id,
-          priceWithProfit: item.unitPrice,
+          priceWithProfit: item.unitPrice, // قیمت فروشگاه (با سود شما)
           title: item.product.title,
+          price: item.product.price, // قیمت اصلی تامین‌کننده
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           image: item.product.productImage?.find((img: any) => img.defaultImage)
             ?.childImage,

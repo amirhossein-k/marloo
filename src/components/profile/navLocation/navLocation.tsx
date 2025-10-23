@@ -21,7 +21,9 @@ const NavLocation = () => {
   let namePath = "";
   switch (cleanPath) {
     case "personal-info":
-      namePath += "ddاطلاعات کاربری";
+      namePath += "اطلاعات کاربری";
+    case "orders":
+      namePath += "لیست سفارشات";
     default:
       namePath += "";
   }

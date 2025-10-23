@@ -38,6 +38,7 @@ type CartItemProduct = {
     title: string;
     priceWithProfit: number;
     priceOffer: number | null
+    price: number
     colorSelected?: CartItemColor;  // 👈 رنگ انتخابی این محصول
 
     image?: string;  // productImage.map(item=>item.defaultImage ===true)[0].childImage
@@ -63,6 +64,9 @@ interface CartState {
     // orderProduct: FullPurchaseOrderRedux[],
     OpenCart: boolean
     accessCart: boolean
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    selectedOrder: any | null; // 👈 سفارش انتخاب شده
+
 }
 
 const initialState: CartState = {
@@ -70,7 +74,9 @@ const initialState: CartState = {
     items: [],
     totalPrice: 0,
     OpenCart: false,
-    accessCart: false
+    accessCart: false,
+    selectedOrder: null, // 👈 مقدار اولیه
+
 }
 // تابع کمکی برای محاسبه مجدد قیمت کل
 const calculateTotalPrice = (items: CartItem[]): number => {
@@ -153,6 +159,12 @@ const cartSlice = createSlice({
             state.items = [];
             state.totalPrice = 0;
         },
+        // 🟢 سفارش انتخاب شده
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setSelectedOrder: (state, action: PayloadAction<any>) => {
+            state.selectedOrder = action.payload;
+        },
+
     },
 });
 
@@ -163,5 +175,6 @@ export const { setCartFromDB,
     removeItem,
     setCartOpen,
     setAccessCart,
+    setSelectedOrder,
     clearCart, } = cartSlice.actions
 export default cartSlice.reducer

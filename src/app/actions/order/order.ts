@@ -201,7 +201,7 @@ export async function createOrder(data: CreateOrderInput) {
 
         const product = await prisma.product.findUnique({
             where: { id: data.productId },
-            select: { supplierId: true, priceWithProfit: true, priceOffer: true, colors: true },
+            select: { supplierId: true, priceWithProfit: true, priceOffer: true, colors: true, price: true },
         });
 
         if (!product) {
@@ -327,7 +327,8 @@ export async function createOrder(data: CreateOrderInput) {
                         title: true,
                         priceWithProfit: true,
                         productImage: true,
-                        priceOffer: true
+                        priceOffer: true,
+                        price: true
                     },
                 },
             },

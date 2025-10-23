@@ -109,6 +109,7 @@ const CartSideBar = () => {
             id: item.product.id,
             title: item.product.title,
             priceWithProfit: item.product.priceWithProfit,
+            price: item.product.price,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             image: item.product.productImage?.find(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
