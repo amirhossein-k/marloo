@@ -79,15 +79,16 @@ export async function generateMetadata(props: {
 }
 
 export default async function ShopPage({
+  params,
   searchParams: searchParamsPromise,
 }: {
+  params: { category: string };
   searchParams: Promise<SearchParams>;
 }) {
   // اضافه کردن await برای حل مشکل "sync-dynamic-apis"
   const searchParams = await searchParamsPromise;
-
-  const { category, sort, page, minPrice, maxPrice, count, offer } =
-    searchParams;
+  const { category } = params;
+  const { sort, page, minPrice, maxPrice, count, offer } = searchParams;
   const currentPage = page ? parseInt(page, 10) : 1;
   const limit = 9;
 

@@ -37,9 +37,7 @@ const SortBar: React.FC<SortBarProps> = ({
   const handleSort = (sort: SortOption) => {
     setIsLoading(true);
     startTransition(() => {
-      router.push(
-        `/products/list?category=${selectedCategory || ""}&sort=${sort}`
-      );
+      router.push(`/products/${selectedCategory || ""}?sort=${sort}`);
     });
   };
 

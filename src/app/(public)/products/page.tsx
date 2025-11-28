@@ -3,9 +3,10 @@
 // noindex
 
 import { getCategory } from "@/app/actions/product/GetCategory";
+import CategoryLink from "@/components/CategoryLink/CategoryLink";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { startTransition } from "react";
 
 export const metadata = {
   title: "همه محصولات",
@@ -41,24 +42,7 @@ export default async function ProductPage() {
 
       {/* 🔵 GRID - ریسپانسیو کامل */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {category.map((cat) => (
-          <Link
-            key={cat.id}
-            href={`/products/${encodeURIComponent(cat.titleCategotyEn)}`}
-            className="bg-white rounded-xl shadow hover:shadow-xl transition p-3"
-          >
-            <Image
-              src={cat.urlPic}
-              alt={cat.titleCategotyPer}
-              width={400}
-              height={300}
-              className="w-full h-40 object-cover rounded-xl"
-            />
-            <p className="text-center mt-3 font-medium text-lg">
-              {cat.titleCategotyPer}
-            </p>
-          </Link>
-        ))}
+        <CategoryLink category={category} />
       </div>
 
       <p className="mt-8 text-gray-500">
