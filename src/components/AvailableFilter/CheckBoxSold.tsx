@@ -1,7 +1,10 @@
 "use client";
 import React, { memo, useTransition } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useLoading } from "@/context/LoadingContext";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setCount } from "@/store/urlFilterSlice";
 
 interface CheckBoxSoldProps {
   namecheckbox: string;
@@ -19,11 +22,23 @@ const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
   selectedSort,
 }) => {
   const { setIsLoading } = useLoading();
+  const dispatch = useDispatch();
+  const pathname = usePathname();
 
+  const { category, max, min, page, sort, offer } = useSelector(
+    (state: RootState) => state.filter
+  );
   const isAvailable = namecheckbox === "موجود";
-  const searchParams = useSearchParams();
-  const minPriceParam = searchParams.get("minPrice") || "0";
-  const maxPriceParam = searchParams.get("maxPrice") || "500000";
+
+  // -------------------------------------------------------
+  // تابع ساخت URL از روی Redux
+  // -------------------------------------------------------
+  const buildUrl = (newSoldOut?: boolean) => {
+    const count = newSoldOut ? 1 : 0;
+    const cat = selectedCategory || category || "";
+    const sortParam = selectedSort || sort || "new";
+    return `/products/${cat}?minPrice=${min}&maxPrice=${max}&sort=${sortParam}&page=${page}&count=${count}&offer=${offer}`;
+  };
 
   // تعریف متغیرهای مورد نیاز قبل از تعریف handleChange
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,17 +50,11 @@ const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
     console.log(checked, "dfdfdfdfdf");
     // اگر چک‌باکس "موجود" باشد، newValue برابر checked است؛ در غیر این صورت برعکس checked
     const newValue = isAvailable ? checked : !checked;
-    console.log(newValue, "newe");
     setSoldOut(newValue);
+    dispatch(setCount(newValue ? 1 : 0));
     setIsLoading(true);
     startTransition(() => {
-      router.push(
-        `/products/list?category=${selectedCategory || ""}&sort=${
-          selectedSort || "new"
-        }&minPrice=${minPriceParam}&maxPrice=${maxPriceParam}&count=${
-          newValue === true ? 1 : 0
-        }`
-      );
+      router.push(buildUrl(newValue));
     });
   };
 

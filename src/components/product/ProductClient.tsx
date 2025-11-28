@@ -154,7 +154,7 @@ const ProductClient = ({ product: initialData, isAdmin }: Props) => {
                   </span>
                   {calculatePercentage(
                     product.priceOffer,
-                    product.priceWithProfit.toString()
+                    String(product.priceWithProfit ?? 0)
                   ).toLocaleString()}
                 </>
               ) : (

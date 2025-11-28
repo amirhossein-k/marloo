@@ -1,6 +1,10 @@
 "use client";
 import React, { memo, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setOffer } from "@/store/urlFilterSlice";
 
 interface CheckBoxOfferProps {
   namecheckbox: string;
@@ -19,9 +23,21 @@ const CheckBoxOffer: React.FC<CheckBoxOfferProps> = ({
 }) => {
   const isAvailable = namecheckbox === "تخفیف دار";
   const searchParams = useSearchParams();
-  const minPriceParam = searchParams.get("minPrice") || "0";
-  const maxPriceParam = searchParams.get("maxPrice") || "500000";
-  const count = searchParams.get("count") || "1";
+  const dispatch = useDispatch();
+  const pathname = usePathname();
+
+  const { category, max, min, page, sort, offer, count } = useSelector(
+    (state: RootState) => state.filter
+  );
+  // -------------------------------------------------------
+  // تابع ساخت URL از روی Redux
+  // -------------------------------------------------------
+  const buildUrl = (newSoldOut?: boolean) => {
+    const offers = newSoldOut ? 1 : 0;
+    const cat = selectedCategory || category || "";
+    const sortParam = selectedSort || sort || "new";
+    return `/products/${cat}?minPrice=${min}&maxPrice=${max}&sort=${sortParam}&page=${page}&count=${count}}&offer=${offers}`;
+  };
 
   // تعریف متغیرهای مورد نیاز قبل از تعریف handleChange
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,18 +45,16 @@ const CheckBoxOffer: React.FC<CheckBoxOfferProps> = ({
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked
-    console.log(checked,'dfdfdfdfdf')
+    const checked = e.target.checked;
+    console.log(checked, "dfdfdfdfdf");
     // اگر چک‌باکس "موجود" باشد، newValue برابر checked است؛ در غیر این صورت برعکس checked
     const newValue = isAvailable ? checked : !checked;
     console.log(newValue, "newe");
     setOfferCheck(newValue);
+    dispatch(setOffer(newValue ? 1 : 0));
+
     startTransition(() => {
-      router.push(
-        `/products/list?category=${selectedCategory || ""}&sort=${
-          selectedSort || "new"
-        }&minPrice=${minPriceParam}&maxPrice=${maxPriceParam}&offer=${newValue===true ? 1: 0}&count=${count}`
-      );
+      router.push(buildUrl(newValue));
     });
   };
 

@@ -2,9 +2,12 @@
 
 import React, { useEffect, useState, useTransition } from "react";
 import { Slider } from "@/components/ui/slider"; // shadcn slider
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import FilterParent from "../Filter/FilterParent";
 import { useLoading } from "@/context/LoadingContext";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setMax, setMin, setPage } from "@/store/urlFilterSlice";
 
 interface PriceFilterProps {
   selectedCategory?: string;
@@ -15,37 +18,71 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
   selectedCategory,
   selectedSort,
 }) => {
-  const searchParams = new URLSearchParams(window.location.search);
-  const minPrice = Number(searchParams.get("minPrice")) || 0;
-  const maxPrice = Number(searchParams.get("maxPrice")) || 5000000;
+  const { category, max, min, page, sort, count, offer } = useSelector(
+    (state: RootState) => state.filter
+  );
+  const dispatch = useDispatch();
+
   const [priceRange, setPriceRange] = useState<[number, number]>([
-    minPrice,
-    maxPrice,
+    min || 0,
+    max || 10000000000,
   ]);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { setIsLoading } = useLoading();
+  // همگام‌سازی محلی با Redux هنگام mount
+  useEffect(() => {
+    setPriceRange([min || 0, max || 100000000]);
+  }, [min, max]);
 
+  // --- استخراج پارامترها فقط در سمت کلاینت ---
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const min = Number(params.get("minPrice")) || 0;
+      const max = Number(params.get("maxPrice")) || 100000000;
+      setPriceRange([min, max]);
+    }
+  }, []);
   // وقتی isPending false شود، loading را خاموش می‌کنیم
   useEffect(() => {
     if (!isPending) {
       setIsLoading(false);
     }
   }, [isPending, setIsLoading]);
+  // ساخت URL با پارامترهای فعلی
+  const buildUrl = (range?: [number, number]) => {
+    const selected = range ?? [0, 100000000];
 
+    return `/products/${category}?minPrice=${selected[0]}&maxPrice=${selected[1]}&sort=${sort}&page=${page}&count=${count}&offer=${offer}`;
+  };
+  // ---------------------------------------------------
+  // حذف فیلتر قیمت
+  // ---------------------------------------------------
   const handlePriceFilterDelete = () => {
     setIsLoading(true);
-
+    dispatch(setMin(0));
+    dispatch(setMax(100000000));
+    dispatch(setPage(1)); // Reset page
     startTransition(() => {
-      router.push(`/products/list`);
+      router.push(
+        `/products/${selectedCategory || ""}?sort=${
+          selectedSort || "new"
+        }&minPrice=0&maxPrice=100000000`
+      );
     });
   };
-
-  const handleNavigation = (url: string) => {
+  // ---------------------------------------------------
+  // اعمال فیلتر قیمت
+  // ---------------------------------------------------
+  const handleApplyFilter = () => {
     setIsLoading(true);
+    dispatch(setMin(priceRange[0]));
+    dispatch(setMax(priceRange[1]));
+    dispatch(setPage(1)); // Reset page
 
     startTransition(() => {
-      router.push(url);
+      router.push(buildUrl());
     });
   };
 
@@ -57,7 +94,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
         {/* --- Shadcn Slider --- */}
         <Slider
           min={0}
-          max={5000000}
+          max={100000000}
           step={10000}
           defaultValue={priceRange}
           onValueChange={(value: number[]) => {
@@ -74,13 +111,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
         {/* --- دکمه‌ها --- */}
         <div className="flex gap-3">
           <button
-            onClick={() =>
-              handleNavigation(
-                `/products/list?category=${selectedCategory || ""}&sort=${
-                  selectedSort || "new"
-                }&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}`
-              )
-            }
+            onClick={handleApplyFilter}
             disabled={isPending}
             className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-md disabled:opacity-60"
           >

@@ -10,8 +10,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 
 export default function ProductCard({
+  category,
   product,
 }: {
+  category: string;
+
   product: FormattedPostType;
 }) {
   console.log(product, "prodict");
@@ -21,14 +24,15 @@ export default function ProductCard({
 
   const router = useRouter();
 
-  const defaultImage =
-    product.productImage.find((item: PHOTO) => item.defaultImage) ??
-    product.productImage[0];
+  const defaultImage = product.productImage.find(
+    (item: PHOTO) => item.defaultImage
+  ) ??
+    product.productImage[0] ?? { childImage: "/fallback.png" };
 
   const handlePush = () => {
     setIsLoadingProduct(true); // 👈 قبل از ناوبری
     startTransition(() => {
-      router.push(`/products/${product.id}`);
+      router.push(`/products/${category}/${product.id}`);
     });
   };
 
@@ -65,7 +69,9 @@ export default function ProductCard({
         </h2>
 
         {product.count !== 0 &&
-          renderCountStatus(product.countproduct.toString())}
+          // renderCountStatus(product.countproduct.toString())
+
+          renderCountStatus(String(product.countproduct ?? 0))}
 
         <p
           className="text-gray-600 flex gap-2 relative"
@@ -108,7 +114,7 @@ export default function ProductCard({
 
       <div className="buttom z-40 my-1 bg-slate-100 border flex justify-center group">
         <Link
-          href={`/products/${product.id}`}
+          href={`/products/${category}/${product.id}`}
           onClick={handlePush}
           className="sm:w-[50%] z-40 group-hover:scale-105 bg-slate-100 block px-1 py-2 text-center cursor-pointer group-hover:bg-blue-200 group-hover:duration-500 group-hover:animate-pulse group-hover:w-full"
         >

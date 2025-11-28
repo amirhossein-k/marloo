@@ -9,9 +9,10 @@ import { useLoading } from "@/context/LoadingContext";
 import { useRouter } from "next/navigation";
 interface ProductGridProps {
   products: FormattedPostType[];
+  category: string;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ products, category }) => {
   // const { isLoading,isLoadingFilter } = useLoading();
   const { isLoading, setIsLoading } = useLoading();
   const [isPending, startTransition] = useTransition();
@@ -35,7 +36,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   const handlepush = () => {
     startTransition(() => {
       setIsLoading(true);
-      router.push("/products/list");
+      router.push("/products");
     });
   };
   if (!products || products.length === 0) {
@@ -69,7 +70,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 ">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard key={product.id} product={product} category={category} />
       ))}
     </div>
   );

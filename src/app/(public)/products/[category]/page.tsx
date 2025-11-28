@@ -33,16 +33,14 @@ type Props = {
 };
 // 🟢 ساخت متادیتا داینامیک بر اساس دسته و مرتب‌سازی
 // 🟢 درست شده
-export async function generateMetadata(props: {
-  searchParams: Promise<{
-    category?: string;
-    sort?: string;
-    page?: string;
-    minPrice?: string;
-    maxPrice?: string;
-  }>;
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: { category: string };
+  searchParams: SearchParams;
 }): Promise<Metadata> {
-  const searchParams = await props.searchParams; // 👈 باید await بشه
+  // const searchParams = await props.searchParams; // 👈 باید await بشه
   console.log("category");
   const category = searchParams?.category || "همه محصولات";
   const description = `لیست ${category} با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.`;
@@ -50,7 +48,7 @@ export async function generateMetadata(props: {
   const page = searchParams?.page || "1";
   const min = searchParams.minPrice || "";
   const max = searchParams.maxPrice || "";
-  const isFiltered = Boolean(sort || min || max);
+  const isFiltered = Boolean(min || max);
   const title = isFiltered
     ? `نتایج ${category} - نتایج فیلتر شده`
     : page && page !== "1"
@@ -182,7 +180,7 @@ export default async function ShopPage({
 
         {/* ستون دوم: لیست محصولات */}
         <div className="col-span-3">
-          <ProductGrid products={products} />
+          <ProductGrid products={products} category={category} />
           <PaginationBar
             totalPages={totalPages}
             currentPage={currentPage}

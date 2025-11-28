@@ -90,8 +90,8 @@ export default function NavbarComponents() {
               درباره ما
             </Link>
             <Link
-              onClick={() => handlePush("/products/list")}
-              href="/products/list"
+              onClick={() => handlePush("/products")}
+              href="/products"
               className=" font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
             >
               محصولات
@@ -117,8 +117,8 @@ export default function NavbarComponents() {
               درباره ما
             </Link>
             <Link
-              onClick={() => handlePush("/products/list")}
-              href="/products/list"
+              onClick={() => handlePush("/products")}
+              href="/products"
               className="font-bold text-lg rounded-md hover:bg-[#b4a1db] h-[50px] justify-center flex items-center flex-1 "
             >
               محصولات

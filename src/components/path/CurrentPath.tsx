@@ -61,7 +61,7 @@ export default function CurrentPath({ productId, cat }: NavigationProps) {
       </button>
       <div>--</div>
       <button
-        onClick={() => handlePush("/products/list")}
+        onClick={() => handlePush("/products")}
         className="hover:text-black text-blue-400"
       >
         محصولات
@@ -69,7 +69,7 @@ export default function CurrentPath({ productId, cat }: NavigationProps) {
       <div>--</div>
       <button
         onClick={() => {
-          const url = `/products/list?category=${cat}&sort=new`;
+          const url = `/products/${cat}?sort=new`;
           console.log("Button clicked, URL:", url);
           handlePush(url);
         }}

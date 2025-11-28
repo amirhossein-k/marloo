@@ -53,7 +53,8 @@ export async function GetProduct({
   // - اگر available true باشد، count برابر 1 داشته باشند
   // - اگر available false باشد، count برابر 0 داشته باشند
   if (count !== undefined) {
-    where.count = count
+    // where.count = count
+    where.count = count === 1 ? 1 : 0;
   }
 
   if (offer !== undefined) {

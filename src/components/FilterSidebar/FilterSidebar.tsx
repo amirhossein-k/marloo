@@ -2,7 +2,7 @@
 "use client";
 // import Link from 'next/link';
 import { useState, useEffect, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Menu } from "lucide-react";
@@ -12,6 +12,14 @@ import OfferFilter from "../offerFilter/OfferFilter";
 import { SortOption } from "@/app/actions/product/GetProductListOrder";
 import PriceFilter from "../product/PriceFilter";
 import { useLoading } from "@/context/LoadingContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  hydrateFromUrl,
+  initialState,
+  setCategory,
+  setPage,
+} from "@/store/urlFilterSlice";
+import { RootState } from "@/store";
 
 interface FilterSidebarProps {
   selectedCategory?: string;
@@ -32,26 +40,62 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const { max, min, page, sort, count, offer } = useSelector(
+    (state: RootState) => state.filter
+  );
+
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { setIsLoading } = useLoading();
-  const searchParams = new URLSearchParams(window.location.search);
-  const minPrice = Number(searchParams.get("minPrice")) || 0;
-  const maxPrice = Number(searchParams.get("maxPrice")) || 5000000;
+  const pathname = usePathname();
 
+  // -------------------------------------------------------
+  // 1) Hydrate Redux from URL on first load
+  // -------------------------------------------------------
   useEffect(() => {
     const checkWidth = () => {
       setIsDesktop(window.innerWidth >= 1280); // xl breakpoint در Tailwind: 1280px
     };
     checkWidth();
+    const params = new URLSearchParams(window.location.search);
+
+    dispatch(
+      hydrateFromUrl({
+        min: Number(params.get("minPrice")) || 0,
+        max: Number(params.get("maxPrice")) || 100000000,
+        sort: params.get("sort") || "new",
+        category:
+          pathname.includes("/products/") && pathname.split("/")[2]
+            ? pathname.split("/")[2]
+            : "",
+        page: Number(params.get("page")) || 1,
+        count: Number(params.get("count")) || 1,
+        offer: Number(params.get("offer")) || 1,
+      })
+    );
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
   }, []);
 
-  const handleNavigation = (url: string) => {
+  // -------------------------------------------------------
+  // تابع ساخت URL از روی Redux
+  // -------------------------------------------------------
+  const buildUrl = (category?: string) => {
+    const selected = category ?? category;
+
+    return `/products/${selected}?minPrice=${min}&maxPrice=${max}&sort=${sort}&page=${page}&count=${count}&offer=${offer}`;
+  };
+
+  const handleCategoryClick = (categorySelect: string) => {
     setIsLoading(true); // 👈 قبل از ناوبری
+    dispatch(setCategory(categorySelect));
+    dispatch(setPage(1)); // هنگام تغییر دسته، صفحه باید 1 شود
+
     startTransition(() => {
-      router.push(url);
+      router.push(buildUrl(categorySelect));
     });
   };
 
@@ -110,15 +154,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   </span>
                 </Link> */}
                     <button
-                      onClick={() =>
-                        handleNavigation(
-                          `/products/list?category=${cat.key}&sort=${
-                            selectedSort || "new"
-                          }&minPrice=${minPrice || 0}&maxPrice=${
-                            maxPrice || 5000000
-                          }`
-                        )
-                      }
+                      onClick={() => handleCategoryClick(cat.key)}
                       className={
                         selectedCategory === cat.key
                           ? "text-blue-600 font-semibold"
@@ -160,15 +196,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   </span>
                 </Link> */}
                     <button
-                      onClick={() =>
-                        handleNavigation(
-                          `/products/list?category=${cat.key}&sort=${
-                            selectedSort || "new"
-                          }&minPrice=${minPrice || 0}&maxPrice=${
-                            maxPrice || 5000000
-                          }`
-                        )
-                      }
+                      onClick={() => handleCategoryClick(cat.key)}
                       className={
                         selectedCategory === cat.key
                           ? "text-blue-600 font-semibold"

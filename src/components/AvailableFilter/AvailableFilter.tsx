@@ -18,7 +18,7 @@ const AvailableFilter: React.FC<AvailableFilterProps> = ({
     <div className="parent-filter group ">
       <FilterParent title_Filter="فیلتر وصعیت موجودی " />
       <div className="subtitle  group-hover:flex flex-col hidden p-2">
-        <div className="category bg-blue-200 text-black flex gap-4 p-3 text-lg bg-[#f3f2f2a1] rounded-md">
+        <div className="category  text-black flex gap-4 p-3 text-lg bg-[#f3f2f2a1] rounded-md">
           <CheckBoxSold
             soldOut={soldOut}
             namecheckbox="ناموجود"
@@ -27,7 +27,7 @@ const AvailableFilter: React.FC<AvailableFilterProps> = ({
             selectedSort={selectedSort?.toString()}
           />
         </div>
-        <div className="category bg-blue-200 text-black flex gap-4 p-3 text-lg bg-[#f3f2f2a1] rounded-md">
+        <div className="category  text-black flex gap-4 p-3 text-lg bg-[#f3f2f2a1] rounded-md">
           <CheckBoxSold
             soldOut={soldOut}
             namecheckbox="موجود"

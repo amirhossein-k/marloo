@@ -123,7 +123,7 @@ model Product {
   priceWithProfit    Float? // قیمت فروشگاه (با سود شما)
   content            String?
   tableContent       String?
-  count              Float
+  count              Float // موجود بودن عدد 1 موجود نبود 0
   countproduct       Float //مقدار کل موجودی
   priceOffer         Float?
   listProperty       ListProperty[]

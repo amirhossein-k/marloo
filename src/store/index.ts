@@ -17,6 +17,7 @@ import {
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 import storage from './storage';
 import cartReducer from './orderSlice'
+import UrlFilterReducer from './urlFilterSlice'
 
 const secretKey = process.env.NEXT_PUBLIC_CRYPTO_SECRET_KEY ?? 'secretkey2338wfef';
 
@@ -40,7 +41,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   orderShop: cartReducer,
   navbar: navReducer, // اصلاح نام
-
+  filter: UrlFilterReducer
 
 
 });
