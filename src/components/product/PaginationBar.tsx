@@ -1,3 +1,4 @@
+// src\components\product\PaginationBar.tsx
 "use client";
 import React, { useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -18,16 +19,20 @@ const PaginationBar: React.FC<PaginationBarProps> = ({
   selectedSort,
 }) => {
   const router = useRouter();
+
   const [isPending, startTransition] = useTransition();
   const { setIsLoading } = useLoading();
+  if (!selectedCategory) return null; // اگر دسته مشخص نیست، نداشته باش
 
   const goToPage = (page: number) => {
     setIsLoading(true); // 🔹 فعال کردن لودینگ
+    const params = new URLSearchParams();
+    if (selectedSort) params.set("sort", selectedSort);
+    if (page && page > 1) params.set("page", String(page));
+    const q = params.toString();
     startTransition(() => {
       router.push(
-        `/products/list?category=${selectedCategory || ""}&sort=${
-          selectedSort || "new"
-        }&page=${page}`
+        `/products/${encodeURIComponent(selectedCategory)}${q ? `?${q}` : ""}`
       );
     });
   };

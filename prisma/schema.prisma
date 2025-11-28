@@ -249,3 +249,12 @@ model ProductImage {
   //   Products Products? @relation(fields: [productId],references: [id],onDelete: Cascade, onUpdate: Cascade) 
   //   productId String?
 }
+
+// مربوط به صفحه انتخاب دسته بندی محصول تا برود به لیست ان 
+model CategotyProduct {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  titleCategotyEn  String
+  titleCategotyPer String
+
+  urlPic String
+}

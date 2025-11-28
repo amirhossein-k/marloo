@@ -1,4 +1,4 @@
-// app/shop/layout.tsx
+// src\app\(public)\products\layout.tsx
 "use client";
 
 import SpinnerLyout from "@/components/spinner/SpinnerLyout";
