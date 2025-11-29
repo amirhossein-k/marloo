@@ -39,11 +39,11 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: { category: string };
-  searchParams: SearchParams;
+  searchParams: Record<string, string | undefined>;
 }): Promise<Metadata> {
   // const searchParams = await props.searchParams; // 👈 باید await بشه
   console.log("category");
-  const category = searchParams?.category || "همه محصولات";
+  const category = params?.category || "همه محصولات";
   const description = `لیست ${category} با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.`;
   const sort = searchParams?.sort || "";
   const page = searchParams?.page || "1";
