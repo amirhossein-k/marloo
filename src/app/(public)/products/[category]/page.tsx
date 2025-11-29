@@ -34,16 +34,14 @@ type Props = {
 // fhthtr
 // 🟢 ساخت متادیتا داینامیک بر اساس دسته و مرتب‌سازی
 // 🟢 درست شده
-export async function generateMetadata(props: {
-  searchParams: Promise<{
-    category?: string;
-    sort?: string;
-    page?: string;
-    minPrice?: string;
-    maxPrice?: string;
-  }>;
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: { category: string };
+  searchParams: SearchParams;
 }): Promise<Metadata> {
-  const searchParams = await props.searchParams; // 👈 باید await بشه
+  // const searchParams = await props.searchParams; // 👈 باید await بشه
   console.log("category");
   const category = searchParams?.category || "همه محصولات";
   const description = `لیست ${category} با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.`;
@@ -81,13 +79,13 @@ export async function generateMetadata(props: {
 
 export default async function ShopPage({
   params,
-  searchParams: searchParamsPromise,
+  searchParams,
 }: {
   params: { category: string };
-  searchParams: Promise<SearchParams>;
+  searchParams: SearchParams;
 }) {
   // اضافه کردن await برای حل مشکل "sync-dynamic-apis"
-  const searchParams = await searchParamsPromise;
+  // const searchParams = await searchParamsPromise;
   const { category } = params;
   const { sort, page, minPrice, maxPrice, count, offer } = searchParams;
   const currentPage = page ? parseInt(page, 10) : 1;
