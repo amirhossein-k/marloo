@@ -1,5 +1,5 @@
 // src\app\(public)\products\[category]\page.tsx
-"use server";
+// "use server";
 import {
   GetProduct,
   GetProductParams,
