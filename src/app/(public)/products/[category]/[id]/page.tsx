@@ -30,21 +30,24 @@ async function fetchProductById(id: string): Promise<FormattedPostType | null> {
 // ----------------------
 // SEO Metadata
 // ----------------------
-export async function generateMetadata({
-  params,
-}: {
-  params: { category: string; id: string };
-}): Promise<Metadata> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function generateMetadata(props: any): Promise<Metadata> {
   // const { params } = props;
-  const { id, category } = params;
-  const product = await fetchProductById(id);
+  const params = props?.params ?? {};
+  const { category, id } = params as { category?: string; id?: string };
+  if (!id) {
+    return {};
+  }
+  const product = await fetchProductById(String(id));
   if (!product) return {};
 
   return {
     title: `${product.title} | فروشگاه`,
     description: product.content ?? product.title,
     alternates: {
-      canonical: `https://your-domain.com/products/${category}/${product.id}`,
+      canonical: `https://your-domain.com/products/${category}/${encodeURIComponent(
+        String(product.id)
+      )}`,
     },
     openGraph: {
       title: product.title,
