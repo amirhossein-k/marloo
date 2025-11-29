@@ -13,8 +13,10 @@ import { authOptions } from "@/lib/auth";
 // ----------------------
 // دریافت اطلاعات محصول
 // ----------------------
-async function getProduct(id: string): Promise<FormattedPostType | null> {
+async function fetchProductById(id: string): Promise<FormattedPostType | null> {
   try {
+    // فرض: GetProduct() یک Promise<FormattedPostType[]> باز می‌گرداند
+
     const response = await GetProduct();
     if (!response) throw new Error("خطا در دریافت اطلاعات محصول");
 
@@ -28,13 +30,12 @@ async function getProduct(id: string): Promise<FormattedPostType | null> {
 // ----------------------
 // SEO Metadata
 // ----------------------
-export async function generateMetadata({
-  params,
-}: {
+export async function generateMetadata(props: {
   params: { id: string };
 }): Promise<Metadata> {
+  const { params } = props;
   const { id } = params;
-  const product = await getProduct(id);
+  const product = await fetchProductById(id);
   if (!product) return {};
 
   return {
@@ -57,7 +58,7 @@ export default async function ProductPage({
   params: { id: string };
 }) {
   const { id } = params;
-  const product = await getProduct(id);
+  const product = await fetchProductById(id);
   if (!product) notFound();
 
   const session = await getServerSession(authOptions);
