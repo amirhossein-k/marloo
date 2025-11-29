@@ -8,16 +8,20 @@ import { setCount } from "@/store/urlFilterSlice";
 
 interface CheckBoxSoldProps {
   namecheckbox: string;
-  soldOut: boolean;
-  setSoldOut: (value: boolean) => void;
+  isChecked: boolean;
+  setChecked: (value: boolean) => void;
+  inStock: boolean;
+  outOfStock: boolean;
   selectedCategory?: string;
   selectedSort?: string;
 }
 
 const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
   namecheckbox,
-  soldOut,
-  setSoldOut,
+  isChecked,
+  setChecked,
+  inStock,
+  outOfStock,
   selectedCategory,
   selectedSort,
 }) => {
@@ -25,19 +29,18 @@ const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
   const dispatch = useDispatch();
   const pathname = usePathname();
 
-  const { category, max, min, page, sort, offer } = useSelector(
+  const { category, max, min, page, sort, offer, count } = useSelector(
     (state: RootState) => state.filter
   );
-  const isAvailable = namecheckbox === "موجود";
 
   // -------------------------------------------------------
   // تابع ساخت URL از روی Redux
   // -------------------------------------------------------
-  const buildUrl = (newSoldOut?: boolean) => {
-    const count = newSoldOut ? 1 : 0;
+  const buildUrl = (newCount: number) => {
+    // const count = newSoldOut ? 1 : 0;
     const cat = selectedCategory || category || "";
     const sortParam = selectedSort || sort || "new";
-    return `/products/${cat}?minPrice=${min}&maxPrice=${max}&sort=${sortParam}&page=${page}&count=${count}&offer=${offer}`;
+    return `/products/${cat}?minPrice=${min}&maxPrice=${max}&sort=${sortParam}&page=${page}&count=${newCount}&offer=${offer}`;
   };
 
   // تعریف متغیرهای مورد نیاز قبل از تعریف handleChange
@@ -45,18 +48,34 @@ const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  // -------------------------------
+  // تغییر وضعیت چک‌باکس
+  // -------------------------------
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
-    console.log(checked, "dfdfdfdfdf");
-    // اگر چک‌باکس "موجود" باشد، newValue برابر checked است؛ در غیر این صورت برعکس checked
-    const newValue = isAvailable ? checked : !checked;
-    setSoldOut(newValue);
-    dispatch(setCount(newValue ? 1 : 0));
+    const newValue = !isChecked;
+    setChecked(newValue);
+
+    // محاسبه مقدار count طبق انتخاب‌ها:
+    let countValue = 2; // پیش‌فرض: نمایش همه
+
+    if (newValue && namecheckbox === "موجود" && !outOfStock)
+      countValue = 1; // فقط موجود
+    else if (newValue && namecheckbox === "ناموجود" && !inStock)
+      countValue = 0; // فقط ناموجود
+    else if (!newValue) {
+      // در حال خاموش کردن
+      if (namecheckbox === "موجود" && outOfStock) countValue = 0; // فقط ناموجود
+      else if (namecheckbox === "ناموجود" && inStock) countValue = 1; // فقط موجود
+    }
+
+    dispatch(setCount(countValue));
     setIsLoading(true);
     startTransition(() => {
-      router.push(buildUrl(newValue));
+      router.push(buildUrl(countValue));
     });
   };
+  console.log(isChecked, "ischexk");
 
   return (
     <div className="flex items-center gap-2  w-full ">
@@ -64,9 +83,11 @@ const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
         className="w-5 rounded-xl border-3"
         type="checkbox"
         onChange={handleChange}
-        name={namecheckbox}
-        value={namecheckbox}
-        checked={isAvailable ? soldOut : !soldOut}
+        // name={namecheckbox}
+        // value={namecheckbox}
+        checked={isChecked}
+
+        // checked={isAvailable ? soldOut : !soldOut}
       />
       <label>{namecheckbox}</label>
     </div>

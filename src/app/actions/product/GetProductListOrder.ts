@@ -53,8 +53,14 @@ export async function GetProduct({
   // - اگر available true باشد، count برابر 1 داشته باشند
   // - اگر available false باشد، count برابر 0 داشته باشند
   if (count !== undefined) {
-    // where.count = count
-    where.count = count === 1 ? 1 : 0;
+    // where.count = count === 1 ? 1 : 0;
+    if (count === 1) {
+      where.count = 1;  // فقط موجودها
+    } else if (count === 0) {
+      where.count = 0;  // فقط ناموجودها
+    } else if (count === 2) {
+      // هیچ فیلتری اعمال نشود → همه نمایش داده شوند
+    }
   }
 
   if (offer !== undefined) {
