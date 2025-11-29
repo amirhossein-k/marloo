@@ -1,4 +1,4 @@
-// src\app\(public)\products\[id]\page.tsx
+// src\app\(public)\products\[category]\[id]\page.tsx
 import { notFound } from "next/navigation";
 
 import { FormattedPostType, PHOTO } from "@/types";
@@ -31,9 +31,9 @@ async function getProduct(id: string): Promise<FormattedPostType | null> {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }): Promise<Metadata> {
-  const { id } = await params;
+  const { id } = params;
   const product = await getProduct(id);
   if (!product) return {};
 
@@ -54,9 +54,9 @@ export async function generateMetadata({
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
   const product = await getProduct(id);
   if (!product) notFound();
 
