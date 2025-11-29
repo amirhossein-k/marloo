@@ -39,7 +39,7 @@ export async function generateMetadata({
 }: {
   params: { category: string };
   searchParams: SearchParams;
-}): Promise<Metadata> {
+}) {
   // const searchParams = await props.searchParams; // 👈 باید await بشه
   console.log("category");
   const category = searchParams?.category || "همه محصولات";
