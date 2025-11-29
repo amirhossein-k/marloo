@@ -31,16 +31,19 @@ type Props = {
     page?: string;
   };
 };
+// fhthtr
 // 🟢 ساخت متادیتا داینامیک بر اساس دسته و مرتب‌سازی
 // 🟢 درست شده
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: { category: string };
-  searchParams: SearchParams;
+export async function generateMetadata(props: {
+  searchParams: Promise<{
+    category?: string;
+    sort?: string;
+    page?: string;
+    minPrice?: string;
+    maxPrice?: string;
+  }>;
 }): Promise<Metadata> {
-  // const searchParams = await props.searchParams; // 👈 باید await بشه
+  const searchParams = await props.searchParams; // 👈 باید await بشه
   console.log("category");
   const category = searchParams?.category || "همه محصولات";
   const description = `لیست ${category} با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.`;

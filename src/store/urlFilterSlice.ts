@@ -19,6 +19,7 @@ const initialState: initialState = {
     count: 1,
     offer: 1
 }
+
 const UrlFilterSlice = createSlice({
     name: "urlfilter",
     initialState,
