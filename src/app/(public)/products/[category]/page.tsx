@@ -1,5 +1,5 @@
 // src\app\(public)\products\[category]\page.tsx
-// "use server";
+"use server";
 import {
   GetProduct,
   GetProductParams,
@@ -39,7 +39,7 @@ export async function generateMetadata({
 }: {
   params: { category: string };
   searchParams: SearchParams;
-}) {
+}): Promise<Metadata> {
   // const searchParams = await props.searchParams; // 👈 باید await بشه
   console.log("category");
   const category = searchParams?.category || "همه محصولات";
@@ -78,13 +78,13 @@ export async function generateMetadata({
 
 export default async function ShopPage({
   params,
-  searchParams,
+  searchParams: searchParamsPromise,
 }: {
   params: { category: string };
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
   // اضافه کردن await برای حل مشکل "sync-dynamic-apis"
-  // const searchParams = await searchParamsPromise;
+  const searchParams = await searchParamsPromise;
   const { category } = params;
   const { sort, page, minPrice, maxPrice, count, offer } = searchParams;
   const currentPage = page ? parseInt(page, 10) : 1;
