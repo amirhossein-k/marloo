@@ -1,3 +1,4 @@
+// src\app\(public)\products\[category]\layout.tsx
 "use server";
 import React from "react";
 
