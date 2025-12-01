@@ -45,9 +45,9 @@ export async function generateMetadata(props: any): Promise<Metadata> {
     title: `${product.title} | فروشگاه`,
     description: product.content ?? product.title,
     alternates: {
-      canonical: `https://your-domain.com/products/${category}/${encodeURIComponent(
-        String(product.id)
-      )}`,
+      canonical: `https://your-domain.com/products/${encodeURIComponent(
+        String(category)
+      )}/${encodeURIComponent(String(product.id))}`,
     },
     openGraph: {
       title: product.title,
