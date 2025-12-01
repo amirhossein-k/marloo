@@ -27,35 +27,6 @@ async function fetchProductById(id: string): Promise<FormattedPostType | null> {
     return null;
   }
 }
-// ----------------------
-// SEO Metadata
-// ----------------------
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// export async function generateMetadata(props: any): Promise<Metadata> {
-//   // const { params } = props;
-//   const params = props?.params ?? {};
-//   const { category, id } = params as { category?: string; id?: string };
-//   if (!id) {
-//     return {};
-//   }
-//   const product = await fetchProductById(String(id));
-//   if (!product) return {};
-
-//   return {
-//     title: `${product.title} | فروشگاه`,
-//     description: product.content ?? product.title,
-//     alternates: {
-//       canonical: `https://your-domain.com/products/${encodeURIComponent(
-//         String(category)
-//       )}/${encodeURIComponent(String(product.id))}`,
-//     },
-//     openGraph: {
-//       title: product.title,
-//       description: product.content ?? product.title,
-//       images: [product.productImage[0]?.childImage],
-//     },
-//   };
-// }
 
 export default async function ProductPage({
   params,
