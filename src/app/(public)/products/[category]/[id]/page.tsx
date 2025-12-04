@@ -1,9 +1,9 @@
 // src\app\(public)\products\[category]\[id]\page.tsx
 import { notFound } from "next/navigation";
 
-import { FormattedPostType, PHOTO } from "@/types";
+import type { FormattedPostType, PHOTO } from "@/types";
 import { GetProduct } from "@/app/actions/product/GetProductList";
-import { Metadata, ResolvingMetadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Script from "next/script";
 import { getServerSession } from "next-auth";
 import ProductClient from "@/components/product/ProductClient";
