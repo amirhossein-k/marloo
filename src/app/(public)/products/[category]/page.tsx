@@ -1,4 +1,5 @@
 // src/app/(public)/products/[category]/page.tsx
+
 import {
   GetProduct,
   GetProductParams,
@@ -23,25 +24,30 @@ type URLSearch = {
   offer?: string;
 };
 
+type Props = {
+  params: Params;
+  searchParams: URLSearch;
+};
+
+// --------------------------------------
+// generateMetadata (بدون Promise)
+// --------------------------------------
 export async function generateMetadata({
   params,
   searchParams,
-}: {
-  params: Params;
-  searchParams?: URLSearch;
-}): Promise<Metadata> {
+}: Props): Promise<Metadata> {
   const category = params?.category ?? "همه محصولات";
   const sort = searchParams?.sort ?? "";
   const page = searchParams?.page ?? "1";
   const min = searchParams?.minPrice ?? "";
   const max = searchParams?.maxPrice ?? "";
-  const hasOffer = searchParams?.offer === "1";
+
+  const hasOffer = searchParams.offer === "1";
 
   const isFiltered = Boolean(min || max || sort || hasOffer);
+
   const title = isFiltered
     ? `فیلتر شده: ${category} | صفحه ${page} | مرتب‌سازی: ${sort || "—"}`
-    : page && page !== "1"
-    ? `خرید ${category} - صفحه ${page}`
     : `خرید ${category}`;
 
   const canonicalBase = `https://marlooshop.vercel.app/products/${encodeURIComponent(
@@ -52,57 +58,48 @@ export async function generateMetadata({
 
   return {
     title,
-    description: `لیست ${category} با بهترین قیمت و تخفیف ویژه. مشاهده محصولات ${category}.`,
+    description: `لیست ${category} با بهترین قیمت و تخفیف ویژه.`,
     robots: isFiltered ? "noindex, follow" : "index, follow",
     alternates: { canonical },
     openGraph: {
       title,
-      description: `لیست ${category} با بهترین قیمت و تخفیف ویژه.`,
+      description: `لیست ${category}.`,
       url: canonical,
     },
   };
 }
 
-export default async function ShopPage({
-  params,
-  searchParams,
-}: {
-  params: Params;
-  searchParams?: URLSearch;
-}) {
+// --------------------------------------
+// ShopPage (کاملاً سازگار با Next.js)
+// --------------------------------------
+export default async function ShopPage({ params, searchParams }: Props) {
   const category = params.category;
+
   const sort = searchParams?.sort ?? "";
   const page = searchParams?.page ?? "1";
-  const minPrice = searchParams?.minPrice;
-  const maxPrice = searchParams?.maxPrice;
-  const count = searchParams?.count;
-  const offer = searchParams?.offer;
 
-  // validate sort option — اگر تابع شما boolean برمی‌گرداند این الگو درست است
   const validatedSort: SortOption = isValidSortOption(sort)
     ? (sort as SortOption)
     : "new";
 
-  const currentPage = page ? parseInt(page, 10) : 1;
-  const limit = 9;
+  const currentPage = parseInt(page, 10);
 
-  const minPriceNum = minPrice ? parseInt(minPrice, 10) : undefined;
-  const maxPriceNum = maxPrice ? parseInt(maxPrice, 10) : undefined;
-  const countNum = count ? parseInt(count, 10) : undefined;
-  const countOffer = offer ? parseInt(offer, 10) : undefined;
+  const minPriceNum = searchParams.minPrice
+    ? parseInt(searchParams.minPrice, 10)
+    : undefined;
 
-  const p = {
-    category,
-    sort: validatedSort,
-    page: currentPage,
-    minPrice: minPriceNum,
-    maxPrice: maxPriceNum,
-    count: countNum,
-    offer: countOffer,
-  };
-  console.log(p, "paramass get product");
+  const maxPriceNum = searchParams.maxPrice
+    ? parseInt(searchParams.maxPrice, 10)
+    : undefined;
 
-  // نکته: اینجا حتما validatedSort را بفرستید، نه sortِ خام
+  const countNum = searchParams.count
+    ? parseInt(searchParams.count, 10)
+    : undefined;
+
+  const offerNum = searchParams.offer
+    ? parseInt(searchParams.offer, 10)
+    : undefined;
+
   const { products = [], totalCount = 0 } = await GetProduct({
     category,
     sort: validatedSort,
@@ -110,54 +107,20 @@ export default async function ShopPage({
     minPrice: minPriceNum,
     maxPrice: maxPriceNum,
     count: countNum,
-    offer: countOffer,
+    offer: offerNum,
   } as GetProductParams);
 
+  const limit = 9;
   const totalPages = Math.ceil(totalCount / limit);
-
-  const breadcrumb = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "خانه",
-        item: "https://marlooshop.vercel.app/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "محصولات",
-        item: "https://marlooshop.vercel.app/products",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: category,
-        item: `https://marlooshop.vercel.app/products/${encodeURIComponent(
-          category ?? ""
-        )}`,
-      },
-    ],
-  };
-
-  const itemList = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    itemListElement: products.map((p: any, i: number) => ({
-      "@type": "ListItem",
-      position: i + 1 + (currentPage - 1) * limit,
-      url: `https://marlooshop.vercel.app/products/${p.id}`,
-    })),
-  };
 
   return (
     <div className="container mx-auto px-4 py-8" dir="rtl">
-      <CurrentPath productId={""} cat={category || ""} />
-      <h1 className="text-2xl font-bold mb-4">لیست {category || "محصولات"}</h1>
+      <CurrentPath productId="" cat={category} />
+
+      <h1 className="text-2xl font-bold mb-4">لیست {category}</h1>
+
       {!products.length && <Spinners />}
+
       <SortBar selectedSort={validatedSort} selectedCategory={category} />
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mt-4">
@@ -165,8 +128,10 @@ export default async function ShopPage({
           selectedCategory={category}
           selectedSort={validatedSort}
         />
+
         <div className="col-span-3">
           <ProductGrid products={products} category={category} />
+
           <PaginationBar
             totalPages={totalPages}
             currentPage={currentPage}
@@ -175,14 +140,6 @@ export default async function ShopPage({
           />
         </div>
       </div>
-
-      <Script id="breadcrumb-jsonld" type="application/ld+json">
-        {JSON.stringify(breadcrumb)}
-      </Script>
-
-      <Script id="itemlist-jsonld" type="application/ld+json">
-        {JSON.stringify(itemList)}
-      </Script>
     </div>
   );
 }
