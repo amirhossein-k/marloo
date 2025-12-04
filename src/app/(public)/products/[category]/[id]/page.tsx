@@ -18,7 +18,7 @@ type ProductPageProps = {
 // ----------------------
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function generateMetadata(
-  { params, searchParams }: ProductPageProps,
+  { params }: ProductPageProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // const { params } = props;
