@@ -70,7 +70,10 @@ async function fetchProductById(id: string): Promise<FormattedPostType | null> {
 export default async function ProductPage({
   params,
   searchParams,
-}: ProductPageProps) {
+}: {
+  params: { category: string; id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const { id, category } = params;
   const product = await fetchProductById(id);
   if (!product) notFound();
