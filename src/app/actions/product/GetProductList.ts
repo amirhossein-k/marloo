@@ -113,3 +113,20 @@ export async function GetProduct() {
         return [];
     }
 }
+
+
+export async function fetchProductById(id: string): Promise<FormattedPostType | null> {
+    try {
+        // دریافت همه محصولات
+        const products: FormattedPostType[] = await GetProduct();
+
+        // پیدا کردن محصول با id مشخص
+        const product = products.find((p) => p.id === id);
+
+        // اگر پیدا نشد، null برگردان
+        return product ?? null;
+    } catch (error) {
+        console.error("Error fetching product by ID:", error);
+        return null;
+    }
+}

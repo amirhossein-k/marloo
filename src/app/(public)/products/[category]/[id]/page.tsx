@@ -13,7 +13,7 @@ import ProductClient from "@/components/product/ProductClient";
 // تعریف دقیق Type برای ورودی‌های generateMetadata
 interface ProductPageParams {
   params: { category: string; id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 // ----------------------
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,12 +66,8 @@ async function fetchProductById(id: string): Promise<FormattedPostType | null> {
   }
 }
 
-export default async function ProductPage({
-  params,
-}: {
-  params: { category: string; id: string };
-}) {
-  const { id } = params;
+export default async function ProductPage({ params }: ProductPageParams) {
+  const { id, category } = params;
   const product = await fetchProductById(id);
   if (!product) notFound();
 
