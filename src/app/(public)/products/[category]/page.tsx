@@ -1,4 +1,4 @@
-// src\app\(public)\products\[category]\page.tsx
+// src/app/(public)/products/[category]/page.tsx
 import {
   GetProduct,
   GetProductParams,
@@ -10,48 +10,39 @@ import ProductGrid from "@/components/product/ProductGrid";
 import SortBar from "@/components/product/SortBar";
 import Spinners from "@/components/product/Spinner";
 import { isValidSortOption, SortOption } from "@/types/shop";
-// import ProductCard from '@/components/products/ProductCard';
-// import { POSTTYPE } from '@/utils/types';
 import { Metadata } from "next";
 import Script from "next/script";
 
-interface SearchParams {
-  params: { category: string };
-  searchParams: {
-    sort?: string;
-    page?: string;
-    minPrice?: string;
-    maxPrice?: string;
-    count?: string;
-    offer?: string;
-    // ... اضافه کردن سایر پارامترهای مورد نیاز
-  };
-}
-type Props = {
-  searchParams?: {
-    category?: string;
-    sort?: string;
-    page?: string;
-  };
+type Params = { category: string };
+type URLSearch = {
+  sort?: string;
+  page?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  count?: string;
+  offer?: string;
 };
-// fhthtr
-// 🟢 ساخت متادیتا داینامیک بر اساس دسته و مرتب‌سازی
-// 🟢 درست شده
-export async function generateMetadata({ params, searchParams }: SearchParams) {
-  // const searchParams = await props.searchParams; // 👈 باید await بشه
-  const category = params.category || "همه محصولات";
-  const sort = searchParams.sort || "";
-  const page = searchParams.page || "1";
-  const min = searchParams.minPrice || "";
-  const max = searchParams.maxPrice || "";
-  // مثال: استفاده از پارامتر offer که خطا داده بود
-  const hasOffer = searchParams.offer === "1";
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams?: URLSearch;
+}): Promise<Metadata> {
+  const category = params?.category ?? "همه محصولات";
+  const sort = searchParams?.sort ?? "";
+  const page = searchParams?.page ?? "1";
+  const min = searchParams?.minPrice ?? "";
+  const max = searchParams?.maxPrice ?? "";
+  const hasOffer = searchParams?.offer === "1";
 
   const isFiltered = Boolean(min || max || sort || hasOffer);
-  let title = `${category} - فروشگاه آنلاین`;
-  if (isFiltered) {
-    title = `فیلتر شده: ${category} | صفحه ${page} | مرتب سازی: ${sort}`;
-  }
+  const title = isFiltered
+    ? `فیلتر شده: ${category} | صفحه ${page} | مرتب‌سازی: ${sort || "—"}`
+    : page && page !== "1"
+    ? `خرید ${category} - صفحه ${page}`
+    : `خرید ${category}`;
 
   const canonicalBase = `https://marlooshop.vercel.app/products/${encodeURIComponent(
     category
@@ -63,9 +54,7 @@ export async function generateMetadata({ params, searchParams }: SearchParams) {
     title,
     description: `لیست ${category} با بهترین قیمت و تخفیف ویژه. مشاهده محصولات ${category}.`,
     robots: isFiltered ? "noindex, follow" : "index, follow",
-    alternates: {
-      canonical,
-    },
+    alternates: { canonical },
     openGraph: {
       title,
       description: `لیست ${category} با بهترین قیمت و تخفیف ویژه.`,
@@ -74,47 +63,58 @@ export async function generateMetadata({ params, searchParams }: SearchParams) {
   };
 }
 
-export default async function ShopPage({ params, searchParams }: SearchParams) {
-  // اضافه کردن await برای حل مشکل "sync-dynamic-apis"
-  const { category } = params;
-  const { sort, page, minPrice, maxPrice, count, offer } = searchParams;
-  const validatedSort: SortOption = isValidSortOption(sort) || "new"; // 'new' به عنوان مقدار پیش‌فرض
+export default async function ShopPage({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams?: URLSearch;
+}) {
+  const category = params.category;
+  const sort = searchParams?.sort ?? "";
+  const page = searchParams?.page ?? "1";
+  const minPrice = searchParams?.minPrice;
+  const maxPrice = searchParams?.maxPrice;
+  const count = searchParams?.count;
+  const offer = searchParams?.offer;
 
-  const currentPage = page ? parseInt(page as string, 10) : 1;
+  // validate sort option — اگر تابع شما boolean برمی‌گرداند این الگو درست است
+  const validatedSort: SortOption = isValidSortOption(sort)
+    ? (sort as SortOption)
+    : "new";
+
+  const currentPage = page ? parseInt(page, 10) : 1;
   const limit = 9;
 
-  // تبدیل مقادیر قیمت به عدد در صورت وجود
-  const minPriceNum = minPrice ? parseInt(minPrice as string, 10) : undefined;
-  const maxPriceNum = maxPrice ? parseInt(maxPrice as string, 10) : undefined;
-  // / تبدیل مقدار count به عدد. اگر count در URL موجود نباشد، undefined است.
-  const countNum = count !== undefined ? parseInt(count as string, 10) : 2;
-  const countOffer =
-    offer !== undefined ? parseInt(offer as string, 10) : undefined;
-  // دریافت محصولات و تعداد کل موارد بر اساس فیلترها
+  const minPriceNum = minPrice ? parseInt(minPrice, 10) : undefined;
+  const maxPriceNum = maxPrice ? parseInt(maxPrice, 10) : undefined;
+  const countNum = count ? parseInt(count, 10) : undefined;
+  const countOffer = offer ? parseInt(offer, 10) : undefined;
+
   const p = {
     category,
     sort: validatedSort,
     page: currentPage,
     minPrice: minPriceNum,
     maxPrice: maxPriceNum,
-    count: countNum, // ارسال به صورت عددی,
-    offer: countOffer, // ارسال به صورت عددی,
+    count: countNum,
+    offer: countOffer,
   };
   console.log(p, "paramass get product");
-  const { products, totalCount } = await GetProduct({
+
+  // نکته: اینجا حتما validatedSort را بفرستید، نه sortِ خام
+  const { products = [], totalCount = 0 } = await GetProduct({
     category,
-    sort,
+    sort: validatedSort,
     page: currentPage,
     minPrice: minPriceNum,
     maxPrice: maxPriceNum,
-    count: countNum, // ارسال به صورت عددی,
-    offer: countOffer, // ارسال به صورت عددی,
+    count: countNum,
+    offer: countOffer,
   } as GetProductParams);
+
   const totalPages = Math.ceil(totalCount / limit);
 
-  console.log(products, "[rprpict");
-
-  // JSON-LD for Breadcrumb and ItemList
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -154,32 +154,24 @@ export default async function ShopPage({ params, searchParams }: SearchParams) {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 " dir="rtl">
-      {/* صفحه ای که هستی را نشان میدهد */}
+    <div className="container mx-auto px-4 py-8" dir="rtl">
       <CurrentPath productId={""} cat={category || ""} />
-      {/* loading  در بخش بالای صفحه در صورت کلیک روی محصول یا دکمه ها به نمایش در می اورد */}
-      {/* <Spinners /> */}
       <h1 className="text-2xl font-bold mb-4">لیست {category || "محصولات"}</h1>
-      {/* Spinner در حالت بارگذاری */}
       {!products.length && <Spinners />}
-      {/* نوار مرتب‌سازی */}
-      <SortBar selectedSort={sort} selectedCategory={category} />
+      <SortBar selectedSort={validatedSort} selectedCategory={category} />
 
-      {/* ساختار دو ستونه: در حالت xl به بالا صفحه دو ستونه نمایش داده می‌شود */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mt-4">
-        {/* ستون اول: FilterSidebar - در حالت rtl اولین ستون در سمت راست قرار می‌گیرد */}
-        {/* <div> */}
-        <FilterSidebar selectedCategory={category} selectedSort={sort} />
-        {/* </div> */}
-
-        {/* ستون دوم: لیست محصولات */}
+        <FilterSidebar
+          selectedCategory={category}
+          selectedSort={validatedSort}
+        />
         <div className="col-span-3">
           <ProductGrid products={products} category={category} />
           <PaginationBar
             totalPages={totalPages}
             currentPage={currentPage}
             selectedCategory={category}
-            selectedSort={sort}
+            selectedSort={validatedSort}
           />
         </div>
       </div>
