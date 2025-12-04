@@ -47,11 +47,12 @@ export interface PHOTO {
 //   createdAt: string;
 //   updatedAt: string;
 // }
-export interface FormattedPostType
-  extends Omit<ProductWithRelations, "createdAt" | "updatedAt" | "productVariants"> {
-  createdAt: string;
-  updatedAt: string;
-}
+// export interface FormattedPostType
+//   extends Omit<ProductWithRelations, "createdAt" | "updatedAt" | "productVariants"> {
+//   createdAt: string;
+//   updatedAt: string;
+// }
+
 
 
 export interface Product {
@@ -206,6 +207,8 @@ export type USERTYPEPrisma = Prisma.UserGetPayload<{
 // خروجی دقیق Product با تمام include ها
 export type ProductWithRelations = Prisma.ProductGetPayload<{
   include: {
+    author: true; // اضافه شده برای دقت بیشتر در روابط
+    supplier: true; // اضافه شده برای دقت بیشتر در روابط
     colors: true,
     productImage: true;
     categoryList: true;
@@ -225,12 +228,54 @@ export type ProductWithRelations = Prisma.ProductGetPayload<{
         };
       };
     };
-    discountDaysLeft: true;
-    discountEndDate: true;
+    // discountDaysLeft: true;
+    // discountEndDate: true;
   };
 }>;
 
+export type FormattedPostType = Omit<
+  ProductWithRelations,
+  | "createdAt"
+  | "updatedAt"
+  | "discountEndDate"
+> & {
+  // فیلدهای تاریخ (فرمت شده به string)
+  createdAt: string;
+  updatedAt: string;
+  discountEndDate: string | null;
 
+  // فیلدهای دیگری که ممکن است در Omit حذف شده باشند (مانند lastUpdatedBySupplier)
+  lastUpdatedBySupplier: Date | null;
+};
+export type ReviewList = Prisma.ReviewListGetPayload<{ select: object }>;
+export type CategoryList = Prisma.CategoryListGetPayload<{ select: object }>;
+export type ListProperty = Prisma.ListPropertyGetPayload<{ select: object }>;
+// --- تعریف Typeهای کمکی سفارشی برای FormattedPostType ---
+
+// تعریف Type برای تصاویر (PHOTO)
+export interface PHOTO {
+  id: string;
+  defaultImage: boolean;
+  childImage: string;
+  fileKey: string | null;
+  ownerId: string | null;
+}
+
+// تعریف Type برای واریانت‌های محصول با مدل و برند
+export type ProductVariantWithRelations = Prisma.ProductVariantGetPayload<{
+  include: {
+    variant: {
+      include: {
+        model: {
+          include: {
+            brand: true;
+            variants: true;
+          };
+        };
+      };
+    };
+  };
+}>;
 // export Colors
 // export interface Variant{
 //   id:string

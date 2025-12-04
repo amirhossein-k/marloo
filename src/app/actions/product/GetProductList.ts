@@ -74,6 +74,8 @@ export async function GetProduct() {
         const listProduct: ProductWithRelations[] = await prisma.product.findMany({
             orderBy: { createdAt: "desc" },
             include: {
+                author: true,
+                supplier: true,
                 colors: true,
                 productImage: true,
                 categoryList: true,
@@ -100,6 +102,9 @@ export async function GetProduct() {
             ...product,
             createdAt: formatToGregorianDate(product.createdAt),
             updatedAt: formatToGregorianDate(product.updatedAt),
+            discountEndDate: product.discountEndDate
+                ? formatToGregorianDate(product.discountEndDate)
+                : null, // باید با Type نهایی (string | null) منطبق باشد.
         }));
 
         return formattedListProduct;
