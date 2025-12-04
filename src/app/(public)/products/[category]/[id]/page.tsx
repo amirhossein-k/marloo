@@ -10,12 +10,20 @@ import ProductClient from "@/components/product/ProductClient";
 
 // ----------------------
 // SEO Metadata
+// تعریف دقیق Type برای ورودی‌های generateMetadata
+interface ProductPageParams {
+  params: { category: string; id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 // ----------------------
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function generateMetadata(props: any): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ProductPageParams): Promise<Metadata> {
   // const { params } = props;
-  const params = props?.params ?? {};
-  const { category, id } = params as { category?: string; id?: string };
+  // const params = props?.params ?? {};
+  const { category, id } = params; // ✅ استفاده مستقیم از params
+  // const { category, id } = params as { category?: string; id?: string };
   if (!id) {
     return {};
   }
