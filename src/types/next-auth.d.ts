@@ -1,3 +1,4 @@
+// src\types\next-auth.d.ts
 import type { Product, InvoiceProduct, Address } from "@prisma/client";
 import { DefaultSession, DefaultUser } from "next-auth";
 

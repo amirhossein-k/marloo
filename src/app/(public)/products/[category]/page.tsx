@@ -37,10 +37,7 @@ type Props = {
 // fhthtr
 // 🟢 ساخت متادیتا داینامیک بر اساس دسته و مرتب‌سازی
 // 🟢 درست شده
-export async function generateMetadata({
-  params,
-  searchParams,
-}: SearchParams): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: SearchParams) {
   // const searchParams = await props.searchParams; // 👈 باید await بشه
   const category = params.category || "همه محصولات";
   const sort = searchParams.sort || "";
