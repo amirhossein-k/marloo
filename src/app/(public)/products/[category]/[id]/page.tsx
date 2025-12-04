@@ -21,7 +21,7 @@ export async function generateMetadata({
   params,
 }: {
   params: { category: string; id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Record<string, string | string[] | undefined>;
 }): Promise<Metadata> {
   // const { params } = props;
   // const params = props?.params ?? {};
@@ -74,7 +74,7 @@ export default async function ProductPage({
   searchParams,
 }: {
   params: { category: string; id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const { id, category } = params;
   const product = await fetchProductById(id);
