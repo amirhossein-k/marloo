@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { FormattedPostType, PHOTO } from "@/types";
 import { GetProduct } from "@/app/actions/product/GetProductList";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import Script from "next/script";
 import { getServerSession } from "next-auth";
 import ProductClient from "@/components/product/ProductClient";
@@ -11,18 +11,16 @@ import ProductClient from "@/components/product/ProductClient";
 // ----------------------
 // SEO Metadata
 // تعریف دقیق Type برای ورودی‌های generateMetadata
-interface ProductPageParams {
+type ProductPageProps = {
   params: { category: string; id: string };
   searchParams?: { [key: string]: string | string[] | undefined };
-}
+};
 // ----------------------
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function generateMetadata({
-  params,
-}: {
-  params: { category: string; id: string };
-  searchParams?: Record<string, string | string[] | undefined>;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  { params, searchParams }: ProductPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   // const { params } = props;
   // const params = props?.params ?? {};
   const { category, id } = params; // ✅ استفاده مستقیم از params
@@ -72,10 +70,7 @@ async function fetchProductById(id: string): Promise<FormattedPostType | null> {
 export default async function ProductPage({
   params,
   searchParams,
-}: {
-  params: { category: string; id: string };
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
+}: ProductPageProps) {
   const { id, category } = params;
   const product = await fetchProductById(id);
   if (!product) notFound();
