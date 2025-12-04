@@ -8,7 +8,7 @@ import { useLoading } from "@/context/LoadingContext";
 
 // import { useLoading } from '@/context/LoadingContext';
 interface SortBarProps {
-  selectedSort?: SortOption;
+  selectedSort?: SortOption | string;
   selectedCategory?: string;
 }
 

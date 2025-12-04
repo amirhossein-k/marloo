@@ -23,7 +23,7 @@ import { RootState } from "@/store";
 
 interface FilterSidebarProps {
   selectedCategory?: string;
-  selectedSort?: SortOption;
+  selectedSort?: SortOption | string;
 }
 
 const categories = [

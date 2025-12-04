@@ -102,7 +102,24 @@ export async function GetProduct({
         orderBy,
         skip,
         take: limit,
-        include: { productImage: true, categoryList: true, review: true, listProperty: true, colors: true, },
+        include: {  // 👈 روابط حذف شده را اضافه کنید
+          author: true,
+          supplier: true,
+          productVariants: {
+            include: {
+              variant: {
+                include: {
+                  model: {
+                    include: {
+                      brand: true,
+                      variants: true
+                    }
+                  }
+                }
+              }
+            }
+          }, productImage: true, categoryList: true, review: true, listProperty: true, colors: true,
+        },
       }),
       prisma.product.count({ where }),
     ]);
@@ -111,6 +128,9 @@ export async function GetProduct({
       ...product,
       createdAt: formatToGregorianDate(product.createdAt),
       updatedAt: formatToGregorianDate(product.updatedAt),
+      discountEndDate: product.discountEndDate
+        ? formatToGregorianDate(product.discountEndDate)
+        : null, // باید با Type نهایی (string | null) منطبق باشد.
     }));
     return { products: formattedListProduct, totalCount };
   } catch (error) {

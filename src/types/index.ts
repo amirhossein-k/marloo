@@ -233,6 +233,13 @@ export type ProductWithRelations = Prisma.ProductGetPayload<{
   };
 }>;
 
+export type SortOption =
+  | 'new'
+  | 'popular'
+  | 'cheap'
+  | 'expensive';
+
+// تعریف Type برای خروجی با تاریخ‌های فرمت‌شده
 export type FormattedPostType = Omit<
   ProductWithRelations,
   | "createdAt"

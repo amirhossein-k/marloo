@@ -15,13 +15,16 @@ import { Metadata } from "next";
 import Script from "next/script";
 
 interface SearchParams {
-  category?: string;
-  sort?: "new" | "old" | "cheap" | "expensive";
-  page?: string;
-  minPrice?: string;
-  maxPrice?: string;
-  count?: string;
-  offer?: string;
+  params: { category: string };
+  searchParams: {
+    sort?: string;
+    page?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    count?: string;
+    offer?: string;
+    // ... اضافه کردن سایر پارامترهای مورد نیاز
+  };
 }
 type Props = {
   searchParams?: {
@@ -36,19 +39,18 @@ type Props = {
 export async function generateMetadata({
   params,
   searchParams,
-}: {
-  params: { category: string };
-  searchParams: Record<string, string | undefined>;
-}): Promise<Metadata> {
+}: SearchParams): Promise<Metadata> {
   // const searchParams = await props.searchParams; // 👈 باید await بشه
-  console.log("category");
-  const category = params?.category || "همه محصولات";
-  const description = `لیست ${category} با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.`;
-  const sort = searchParams?.sort || "";
-  const page = searchParams?.page || "1";
+  const category = params.category || "همه محصولات";
+  const sort = searchParams.sort || "";
+  const page = searchParams.page || "1";
   const min = searchParams.minPrice || "";
   const max = searchParams.maxPrice || "";
-  const isFiltered = Boolean(min || max);
+  // مثال: استفاده از پارامتر offer که خطا داده بود
+  const hasOffer = searchParams.offer === "1";
+  const description = `لیست ${category} با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.`;
+
+  const isFiltered = Boolean(min || max || sort || hasOffer);
   const title = isFiltered
     ? `نتایج ${category} - نتایج فیلتر شده`
     : page && page !== "1"
@@ -76,13 +78,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ShopPage({
-  params,
-  searchParams,
-}: {
-  params: { category: string };
-  searchParams: SearchParams;
-}) {
+export default async function ShopPage({ params, searchParams }: SearchParams) {
   // اضافه کردن await برای حل مشکل "sync-dynamic-apis"
   // const searchParams = await searchParamsPromise;
   const { category } = params;
