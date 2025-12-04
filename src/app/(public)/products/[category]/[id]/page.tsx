@@ -124,8 +124,12 @@ export default async function ProductPage({
         ? {
             "@type": "AggregateRating",
             ratingValue:
-              product.review.reduce((sum, r) => sum + r.rating, 0) /
-              product.review.length,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              product.review.reduce(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (sum: any, r: { rating: any }) => sum + r.rating,
+                0
+              ) / product.review.length,
             reviewCount: product.review.length,
           }
         : undefined,
