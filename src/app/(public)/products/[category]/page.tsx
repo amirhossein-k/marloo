@@ -9,6 +9,7 @@ import PaginationBar from "@/components/product/PaginationBar";
 import ProductGrid from "@/components/product/ProductGrid";
 import SortBar from "@/components/product/SortBar";
 import Spinners from "@/components/product/Spinner";
+import { isValidSortOption, SortOption } from "@/types/shop";
 // import ProductCard from '@/components/products/ProductCard';
 // import { POSTTYPE } from '@/utils/types';
 import { Metadata } from "next";
@@ -48,14 +49,12 @@ export async function generateMetadata({
   const max = searchParams.maxPrice || "";
   // مثال: استفاده از پارامتر offer که خطا داده بود
   const hasOffer = searchParams.offer === "1";
-  const description = `لیست ${category} با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.`;
 
   const isFiltered = Boolean(min || max || sort || hasOffer);
-  const title = isFiltered
-    ? `نتایج ${category} - نتایج فیلتر شده`
-    : page && page !== "1"
-    ? `خرید ${category} - صفحه ${page}`
-    : `خرید ${category}`;
+  let title = `${category} - فروشگاه آنلاین`;
+  if (isFiltered) {
+    title = `فیلتر شده: ${category} | صفحه ${page} | مرتب سازی: ${sort}`;
+  }
 
   const canonicalBase = `https://marlooshop.vercel.app/products/${encodeURIComponent(
     category
@@ -80,22 +79,24 @@ export async function generateMetadata({
 
 export default async function ShopPage({ params, searchParams }: SearchParams) {
   // اضافه کردن await برای حل مشکل "sync-dynamic-apis"
-  // const searchParams = await searchParamsPromise;
   const { category } = params;
   const { sort, page, minPrice, maxPrice, count, offer } = searchParams;
-  const currentPage = page ? parseInt(page, 10) : 1;
+  const validatedSort: SortOption = isValidSortOption(sort) || "new"; // 'new' به عنوان مقدار پیش‌فرض
+
+  const currentPage = page ? parseInt(page as string, 10) : 1;
   const limit = 9;
 
   // تبدیل مقادیر قیمت به عدد در صورت وجود
-  const minPriceNum = minPrice ? Number(minPrice) : undefined;
-  const maxPriceNum = maxPrice ? Number(maxPrice) : undefined;
+  const minPriceNum = minPrice ? parseInt(minPrice as string, 10) : undefined;
+  const maxPriceNum = maxPrice ? parseInt(maxPrice as string, 10) : undefined;
   // / تبدیل مقدار count به عدد. اگر count در URL موجود نباشد، undefined است.
-  const countNum = count !== undefined ? Number(count) : undefined;
-  const countOffer = offer !== undefined ? Number(offer) : undefined;
+  const countNum = count !== undefined ? parseInt(count as string, 10) : 2;
+  const countOffer =
+    offer !== undefined ? parseInt(offer as string, 10) : undefined;
   // دریافت محصولات و تعداد کل موارد بر اساس فیلترها
   const p = {
     category,
-    sort,
+    sort: validatedSort,
     page: currentPage,
     minPrice: minPriceNum,
     maxPrice: maxPriceNum,
