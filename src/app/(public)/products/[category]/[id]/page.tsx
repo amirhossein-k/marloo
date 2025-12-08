@@ -11,9 +11,17 @@ import ProductClient from "@/components/product/ProductClient";
 // ----------------------
 // SEO Metadata
 // تعریف دقیق Type برای ورودی‌های generateMetadata
+type ProductPageParams = {
+  category: string;
+  id: string;
+};
+type ProductPageSearchParams = {
+  [key: string]: string | string[] | undefined;
+};
+// برای generateMetadata و خود صفحه
 type ProductPageProps = {
-  params: { category: string; id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  params: Promise<ProductPageParams>;
+  searchParams?: Promise<ProductPageSearchParams>;
 };
 // ----------------------
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,7 +31,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // const { params } = props;
   // const params = props?.params ?? {};
-  const { category, id } = params; // ✅ استفاده مستقیم از params
+  const { category, id } = await params;
   // const { category, id } = params as { category?: string; id?: string };
   if (!id) {
     return {};
@@ -70,11 +78,10 @@ async function fetchProductById(id: string): Promise<FormattedPostType | null> {
 export default async function ProductPage({
   params,
   searchParams,
-}: {
-  params: { category: string; id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const { id, category } = params;
+}: ProductPageProps) {
+  const { id, category } = await params;
+  const sp = searchParams ? await searchParams : {};
+
   const product = await fetchProductById(id);
   if (!product) notFound();
 
