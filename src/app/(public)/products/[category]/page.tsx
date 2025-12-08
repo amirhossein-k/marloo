@@ -25,10 +25,9 @@ type URLSearch = {
 };
 
 type Props = {
-  params: Params;
-  searchParams: URLSearch;
+  params: Promise<Params>;
+  searchParams: Promise<URLSearch>;
 };
-
 // --------------------------------------
 // generateMetadata (بدون Promise)
 // --------------------------------------
@@ -36,13 +35,14 @@ export async function generateMetadata({
   params,
   searchParams,
 }: Props): Promise<Metadata> {
-  const category = params?.category ?? "همه محصولات";
-  const sort = searchParams?.sort ?? "";
-  const page = searchParams?.page ?? "1";
-  const min = searchParams?.minPrice ?? "";
-  const max = searchParams?.maxPrice ?? "";
+  const { category = "همه محصولات" } = await params;
+  const sp = await searchParams;
 
-  const hasOffer = searchParams.offer === "1";
+  const sort = sp.sort ?? "";
+  const page = sp.page ?? "1";
+  const min = sp.minPrice ?? "";
+  const max = sp.maxPrice ?? "";
+  const hasOffer = sp.offer === "1";
 
   const isFiltered = Boolean(min || max || sort || hasOffer);
 
@@ -73,10 +73,11 @@ export async function generateMetadata({
 // ShopPage (کاملاً سازگار با Next.js)
 // --------------------------------------
 export default async function ShopPage({ params, searchParams }: Props) {
-  const category = params.category;
+  const { category } = await params;
+  const sp = await searchParams;
 
-  const sort = searchParams?.sort ?? "";
-  const page = searchParams?.page ?? "1";
+  const sort = sp.sort ?? "";
+  const page = sp.page ?? "1";
 
   const validatedSort: SortOption = isValidSortOption(sort)
     ? (sort as SortOption)
@@ -84,21 +85,10 @@ export default async function ShopPage({ params, searchParams }: Props) {
 
   const currentPage = parseInt(page, 10);
 
-  const minPriceNum = searchParams.minPrice
-    ? parseInt(searchParams.minPrice, 10)
-    : undefined;
-
-  const maxPriceNum = searchParams.maxPrice
-    ? parseInt(searchParams.maxPrice, 10)
-    : undefined;
-
-  const countNum = searchParams.count
-    ? parseInt(searchParams.count, 10)
-    : undefined;
-
-  const offerNum = searchParams.offer
-    ? parseInt(searchParams.offer, 10)
-    : undefined;
+  const minPriceNum = sp.minPrice ? parseInt(sp.minPrice, 10) : undefined;
+  const maxPriceNum = sp.maxPrice ? parseInt(sp.maxPrice, 10) : undefined;
+  const countNum = sp.count ? parseInt(sp.count, 10) : undefined;
+  const offerNum = sp.offer ? parseInt(sp.offer, 10) : undefined;
 
   const { products = [], totalCount = 0 } = await GetProduct({
     category,
