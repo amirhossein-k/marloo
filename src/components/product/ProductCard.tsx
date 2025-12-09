@@ -1,13 +1,13 @@
 // components/products/ProductCard.tsx
 "use client";
 import { useLoading } from "@/context/LoadingContext";
-import { FormattedPostType, PHOTO, Product } from "@/types";
+import { FormattedEasaypostType, PHOTO, Product } from "@/types";
 import { renderCountStatus } from "@/utils/CountStatus";
 import { calculatePercentage } from "@/utils/OfferMade";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 
 export default function ProductCard({
   category,
@@ -15,12 +15,12 @@ export default function ProductCard({
 }: {
   category: string;
 
-  product: FormattedPostType;
+  product: FormattedEasaypostType;
 }) {
   console.log(product, "prodict");
 
   const [isPending, startTransition] = useTransition();
-  const { setIsLoadingProduct } = useLoading();
+  const { setIsLoadingProduct, setIsLoading } = useLoading();
 
   const router = useRouter();
 
@@ -51,7 +51,20 @@ export default function ProductCard({
           <span className="text-2xl text-[#000000]">ناموجود</span>
         </div>
       )}
-
+      <span className={` absolute top-0 left-0 `}>
+        {product.priceOffer !== 0 && (
+          <span className="bg-[#157ed4] text-white text-xs px-2 py-1 rounded-br-lg rounded-tl-lg">
+            تخفیف ویژه
+          </span>
+        )}
+      </span>
+      <span className={` absolute top-0 right-0 `}>
+        {product.priceOffer !== 0 && (
+          <span className="bg-[#15d4d4] text-white text-xs px-2 py-1 rounded-bl-lg rounded-tr-lg">
+            {product.priceOffer?.toLocaleString()}%
+          </span>
+        )}
+      </span>
       <Image
         src={defaultImage?.childImage || "/fallback.png"}
         alt={product.title}
@@ -74,25 +87,57 @@ export default function ProductCard({
           renderCountStatus(String(product.countproduct ?? 0))}
 
         <p
-          className="text-gray-600 flex gap-2 relative"
+          className="text-gray-600 flex gap-2 relative items-center"
           itemProp="offers"
           itemScope
           itemType="https://schema.org/Offer"
         >
-          <span className="text-lg flex gap-4">
-            <span itemProp="priceCurrency" content="IRR">
+          <span className={`text-lg flex gap-2 items-center `}>
+            <span
+              itemProp="priceCurrency"
+              content="IRR"
+              // className={`items-center  justify-center flex ${
+              //   product.priceOffer !== 0 ? "line-through text-gray-400" : ""
+              // }`}
+            >
               تومان
             </span>
-            <span itemProp="price"> {product.price.toLocaleString()} </span>
+            <span
+              itemProp="price"
+              className={`${
+                product.priceOffer !== 0 ? "line-through text-gray-400" : ""
+              }`}
+            >
+              {" "}
+              {product.price.toLocaleString()}{" "}
+            </span>
+            {/* اگر تخفیف دارد، قیمت با تخفیف و درصد را نشان بده */}
+
             {product.priceOffer !== 0 && (
-              <>
-                <span className="diagonal-line w-[45px] h-[2px] absolute bg-red-600 rotate-[0deg] right-2 top-[13px] inline-block"></span>
-                {product.priceOffer &&
-                  calculatePercentage(
-                    product.priceOffer,
-                    product.price.toString()
-                  ).toLocaleString()}
-              </>
+              // <>
+              //   <span className="diagonal-line w-[45px] h-[2px] absolute bg-red-600 rotate-[0deg] right-2 top-[13px] inline-block"></span>
+              //   {product.priceOffer &&
+              //     calculatePercentage(
+              //       product.priceOffer,
+              //       product.price.toString()
+              //     ).toLocaleString()}
+              // </>
+              <span className="flex gap-2 items-center text-lg text-red-600">
+                {/* <span>
+                  {product.priceOffer &&
+                    calculatePercentage(
+                      product.priceOffer,
+                      product.price.toString()
+                    ).toLocaleString()}
+                </span> */}
+                <span className="text-sm bg-red-100 text-red-700 px-1 rounded">
+                  {product.priceOffer &&
+                    calculatePercentage(
+                      product.priceOffer,
+                      product.price.toString()
+                    ).toLocaleString()}
+                </span>
+              </span>
             )}
           </span>
           <Image
@@ -114,8 +159,11 @@ export default function ProductCard({
 
       <div className="buttom z-40 my-1 bg-slate-100 border flex justify-center group">
         <Link
-          href={`/products/${category}/${product.id}`}
-          onClick={handlePush}
+          href={`/products/${encodeURIComponent(category)}/${encodeURIComponent(
+            product.id
+          )}`}
+          prefetch={true}
+          onClick={() => setIsLoadingProduct(true)}
           className="sm:w-[50%] z-40 group-hover:scale-105 bg-slate-100 block px-1 py-2 text-center cursor-pointer group-hover:bg-blue-200 group-hover:duration-500 group-hover:animate-pulse group-hover:w-full"
         >
           مشاهده

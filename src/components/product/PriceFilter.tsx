@@ -32,7 +32,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
   const { setIsLoading } = useLoading();
   // همگام‌سازی محلی با Redux هنگام mount
   useEffect(() => {
-    setPriceRange([min || 0, max || 100000000]);
+    setPriceRange([min || 0, max || 10000000000]);
   }, [min, max]);
 
   // --- استخراج پارامترها فقط در سمت کلاینت ---
@@ -40,7 +40,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const min = Number(params.get("minPrice")) || 0;
-      const max = Number(params.get("maxPrice")) || 100000000;
+      const max = Number(params.get("maxPrice")) || 10000000000;
       setPriceRange([min, max]);
     }
   }, []);
@@ -52,7 +52,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
   }, [isPending, setIsLoading]);
   // ساخت URL با پارامترهای فعلی
   const buildUrl = (range?: [number, number]) => {
-    const selected = range ?? [0, 100000000];
+    const selected = range ?? priceRange; // از priceRange فعلی استفاده کن
 
     return `/products/${category}?minPrice=${selected[0]}&maxPrice=${selected[1]}&sort=${sort}&page=${page}&count=${count}&offer=${offer}`;
   };
@@ -82,7 +82,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
     dispatch(setPage(1)); // Reset page
 
     startTransition(() => {
-      router.push(buildUrl());
+      router.push(buildUrl(priceRange));
     });
   };
 
@@ -96,7 +96,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
           min={0}
           max={100000000}
           step={10000}
-          defaultValue={priceRange}
+          value={priceRange}
           onValueChange={(value: number[]) => {
             setPriceRange([value[0], value[1]]);
           }}

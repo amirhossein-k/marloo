@@ -1,7 +1,7 @@
 // src\app\actions\product\GetProductListOrder.ts
 "use server";
 import { db as prisma } from '@/app/lib/db'
-import { FormattedPostType } from '@/types';
+import { FormattedEasaypostType, FormattedPostType } from '@/types';
 import { format } from 'date-fns';
 
 export type SortOption = 'new' | 'old' | 'cheap' | 'expensive';
@@ -102,9 +102,10 @@ export async function GetProduct({
         orderBy,
         skip,
         take: limit,
+
         include: {  // 👈 روابط حذف شده را اضافه کنید
-          author: true,
-          supplier: true,
+          // author: true,
+          // supplier: true,
           productVariants: {
             include: {
               variant: {
@@ -124,7 +125,7 @@ export async function GetProduct({
       prisma.product.count({ where }),
     ]);
 
-    const formattedListProduct: FormattedPostType[] = products.map((product) => ({
+    const formattedListProduct: FormattedEasaypostType[] = products.map((product) => ({
       ...product,
       createdAt: formatToGregorianDate(product.createdAt),
       updatedAt: formatToGregorianDate(product.updatedAt),

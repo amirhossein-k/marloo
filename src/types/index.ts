@@ -207,8 +207,8 @@ export type USERTYPEPrisma = Prisma.UserGetPayload<{
 // خروجی دقیق Product با تمام include ها
 export type ProductWithRelations = Prisma.ProductGetPayload<{
   include: {
-    author: true; // اضافه شده برای دقت بیشتر در روابط
-    supplier: true; // اضافه شده برای دقت بیشتر در روابط
+    // author: true; // اضافه شده برای دقت بیشتر در روابط
+    // supplier: true; // اضافه شده برای دقت بیشتر در روابط
     colors: true,
     productImage: true;
     categoryList: true;
@@ -244,7 +244,9 @@ export type FormattedPostType = Omit<
   ProductWithRelations,
   | "createdAt"
   | "updatedAt"
-  | "discountEndDate"
+  | "discountEndDate" |
+
+  ""
 > & {
   // فیلدهای تاریخ (فرمت شده به string)
   createdAt: string;
@@ -254,6 +256,24 @@ export type FormattedPostType = Omit<
   // فیلدهای دیگری که ممکن است در Omit حذف شده باشند (مانند lastUpdatedBySupplier)
   lastUpdatedBySupplier: Date | null;
 };
+export type FormattedEasaypostType = {
+  createdAt: string;
+  updatedAt: string;
+  discountEndDate: string | null;
+  content: string | null;
+
+  lastUpdatedBySupplier: Date | null;
+  id: string
+  price: number
+  title: string
+  count: number
+  productImage: PHOTO[]
+  priceOffer?: number | null
+  priceWithProfit?: number | null
+  countproduct: number
+  colors: Colors[]
+  review: Review[]
+}
 export type ReviewList = Prisma.ReviewListGetPayload<{ select: object }>;
 export type CategoryList = Prisma.CategoryListGetPayload<{ select: object }>;
 export type ListProperty = Prisma.ListPropertyGetPayload<{ select: object }>;

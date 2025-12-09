@@ -3,12 +3,12 @@
 import React, { useEffect, useTransition } from "react";
 import ProductCard from "./ProductCard";
 // import { useLoading } from '@/context/LoadingContext';
-import { FormattedPostType } from "@/types";
+import { FormattedEasaypostType } from "@/types";
 import SkeletonCard from "./SkeletonCard";
 import { useLoading } from "@/context/LoadingContext";
 import { useRouter } from "next/navigation";
 interface ProductGridProps {
-  products: FormattedPostType[];
+  products: FormattedEasaypostType[];
   category: string;
 }
 
@@ -25,7 +25,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, category }) => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
         {Array.from({ length: 6 }).map((_, i) => (
           <SkeletonCard key={i} />
         ))}
@@ -68,7 +68,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, category }) => {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 ">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 ">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} category={category} />
       ))}
