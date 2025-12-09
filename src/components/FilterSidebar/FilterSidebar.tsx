@@ -20,6 +20,7 @@ import {
   setPage,
 } from "@/store/urlFilterSlice";
 import { RootState } from "@/store";
+import Link from "next/link";
 
 interface FilterSidebarProps {
   selectedCategory?: string;
@@ -190,12 +191,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
               {categories.map((cat) => (
                 <li key={cat.key} className="mb-2 w-full ">
                   <div className="category  w-full text-black flex gap-4 p-3 text-lg bg-[#f3f2f2a1] rounded-md">
-                    {/* <Link href={`/products/list?category=${cat}&sort=${selectedSort || 'new'}`}>
-                  <span className={selectedCategory === cat ? 'text-blue-600 font-semibold' : 'cursor-pointer'}>
-                    {cat}
-                  </span>
-                </Link> */}
-                    <button
+                    {/* <button
                       onClick={() => handleCategoryClick(cat.key)}
                       className={
                         selectedCategory === cat.key
@@ -204,7 +200,23 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                       }
                     >
                       {cat.label}
-                    </button>
+                    </button> */}
+                    <Link
+                      href={`/products/${cat.key}?minPrice=${min}&maxPrice=${max}&sort=${sort}&page=1&count=${count}&offer=${offer}`}
+                      prefetch
+                      onClick={() => {
+                        dispatch(setCategory(cat.key));
+                        dispatch(setPage(1));
+                        setIsLoading(true); // اگر می‌خواهی overlay خودت را هم نشان بدهی
+                      }}
+                      className={
+                        selectedCategory === cat.key
+                          ? "text-blue-600 font-semibold w-full"
+                          : "cursor-pointer w-full"
+                      }
+                    >
+                      {cat.label}
+                    </Link>
                   </div>
                 </li>
               ))}

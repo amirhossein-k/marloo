@@ -1,4 +1,4 @@
-// actions/GetProductListOrder.ts
+// src\app\actions\product\GetProductListOrder.ts
 "use server";
 import { db as prisma } from '@/app/lib/db'
 import { FormattedPostType } from '@/types';

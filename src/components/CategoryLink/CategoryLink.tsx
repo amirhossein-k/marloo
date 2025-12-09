@@ -1,32 +1,19 @@
-"use client";
-import { useLoading } from "@/context/LoadingContext";
 import { CategotyProduct } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { startTransition } from "react";
+import React from "react";
 
 interface CategoryLinkProps {
   category: CategotyProduct[];
 }
 const CategoryLink = ({ category }: CategoryLinkProps) => {
-  const router = useRouter();
-  const { setIsLoading } = useLoading();
-
-  const handleCategoryClick = (titleCategotyEn: string) => {
-    console.log(`دسته انتخاب شده: ${titleCategotyEn}`);
-    setIsLoading(true); // 👈 قبل از ناوبری
-    startTransition(() => {
-      router.push(`/products/${encodeURIComponent(titleCategotyEn)}`);
-    });
-  };
-
   return (
     <>
       {category.map((cat) => (
         <Link
-          onClick={() => handleCategoryClick(cat.titleCategotyEn)}
+          // onClick={() => handleCategoryClick(cat.titleCategotyEn)}
           key={cat.id}
+          prefetch={true}
           href={`/products/${encodeURIComponent(cat.titleCategotyEn)}`}
           className="bg-white rounded-xl shadow hover:shadow-xl transition p-3"
         >

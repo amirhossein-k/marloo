@@ -44,7 +44,7 @@ const UrlFilterSlice = createSlice({
             state.count = action.payload
         },
         setOffer: (state, action: PayloadAction<number>) => {
-            state.count = action.payload
+            state.offer = action.payload
         },
         /** Sync with URL on startup */
         hydrateFromUrl: (state, action: PayloadAction<Partial<initialState>>) => {

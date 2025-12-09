@@ -36,7 +36,7 @@ const CheckBoxOffer: React.FC<CheckBoxOfferProps> = ({
     const offers = newSoldOut ? 1 : 0;
     const cat = selectedCategory || category || "";
     const sortParam = selectedSort || sort || "new";
-    return `/products/${cat}?minPrice=${min}&maxPrice=${max}&sort=${sortParam}&page=${page}&count=${count}}&offer=${offers}`;
+    return `/products/${cat}?minPrice=${min}&maxPrice=${max}&sort=${sortParam}&page=${page}&count=${count}&offer=${offers}`;
   };
 
   // تعریف متغیرهای مورد نیاز قبل از تعریف handleChange

@@ -32,20 +32,20 @@ export default function CurrentPath({ productId, cat }: NavigationProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const { setIsLoadingProduct, isLoadingProduct } = useLoading();
+  const { setIsLoading } = useLoading();
 
   const handlePush = (url: string) => {
-    setIsLoadingProduct(true);
+    setIsLoading(true);
     startTransition(() => {
       router.push(`${url}`);
     });
   };
   // وقتی عملیات تغییر مسیر به پایان رسید loading را خاموش می‌کنیم
-  useEffect(() => {
-    if (!isPending) {
-      setIsLoadingProduct(false);
-    }
-  }, [isPending]);
+  // useEffect(() => {
+  //   if (!isPending) {
+  //     setIsLoadingProduct(false);
+  //   }
+  // }, [isPending]);
   // useEffect(() => {
   //   // هر وقت products تغییر کرد => لودینگ خاموش کن
   //   setIsLoadingProduct(false);

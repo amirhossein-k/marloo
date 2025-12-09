@@ -8,10 +8,9 @@ import { setCount } from "@/store/urlFilterSlice";
 
 interface CheckBoxSoldProps {
   namecheckbox: string;
-  isChecked: boolean;
-  setChecked: (value: boolean) => void;
-  inStock: boolean;
-  outOfStock: boolean;
+  isChecked: boolean; // از parent میاد (computed از Redux)
+  inStock: boolean; // وضعیت "موجود" از parent
+  outOfStock: boolean; // وضعیت "ناموجود" از parent
   selectedCategory?: string;
   selectedSort?: string;
 }
@@ -19,7 +18,6 @@ interface CheckBoxSoldProps {
 const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
   namecheckbox,
   isChecked,
-  setChecked,
   inStock,
   outOfStock,
   selectedCategory,
@@ -52,27 +50,32 @@ const CheckBoxSold: React.FC<CheckBoxSoldProps> = ({
   // تغییر وضعیت چک‌باکس
   // -------------------------------
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
+    // محاسبه count جدید بر اساس وضعیت فعلی
+    let newCount: number;
     const newValue = !isChecked;
-    setChecked(newValue);
 
     // محاسبه مقدار count طبق انتخاب‌ها:
-    let countValue = 2; // پیش‌فرض: نمایش همه
+    // let countValue = 2; // پیش‌فرض: نمایش همه
 
-    if (newValue && namecheckbox === "موجود" && !outOfStock)
-      countValue = 1; // فقط موجود
-    else if (newValue && namecheckbox === "ناموجود" && !inStock)
-      countValue = 0; // فقط ناموجود
-    else if (!newValue) {
-      // در حال خاموش کردن
-      if (namecheckbox === "موجود" && outOfStock) countValue = 0; // فقط ناموجود
-      else if (namecheckbox === "ناموجود" && inStock) countValue = 1; // فقط موجود
+    // if (newValue && namecheckbox === "موجود" && !outOfStock)
+    //   countValue = 1; // فقط موجود
+    // else if (newValue && namecheckbox === "ناموجود" && !inStock)
+    //   countValue = 0; // فقط ناموجود
+    // else if (!newValue) {
+    //   // در حال خاموش کردن
+    //   if (namecheckbox === "موجود" && outOfStock) countValue = 0; // فقط ناموجود
+    //   else if (namecheckbox === "ناموجود" && inStock) countValue = 1; // فقط موجود
+    // }
+    if (namecheckbox === "موجود") {
+      newCount = inStock ? 2 : 1; // اگه موجود تیک بود → همه، وگرنه فقط موجود
+    } else {
+      newCount = outOfStock ? 2 : 0; // اگه ناموجود تیک بود → همه، وگرنه فقط ناموجود
     }
 
-    dispatch(setCount(countValue));
+    dispatch(setCount(newCount));
     setIsLoading(true);
     startTransition(() => {
-      router.push(buildUrl(countValue));
+      router.push(buildUrl(newCount));
     });
   };
   console.log(isChecked, "ischexk");

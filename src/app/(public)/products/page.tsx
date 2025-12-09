@@ -4,9 +4,6 @@
 
 import { getCategory } from "@/app/actions/product/GetCategory";
 import CategoryLink from "@/components/CategoryLink/CategoryLink";
-import Image from "next/image";
-import Link from "next/link";
-import React, { startTransition } from "react";
 
 export const metadata = {
   title: "همه محصولات",
