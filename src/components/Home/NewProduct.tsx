@@ -11,7 +11,7 @@ import NftCard from "./CardGrid";
 const NewProduct = ({ newproduct }: { newproduct: Product[] }) => {
   const openNav = useSelector((state: RootState) => state.navbar.openNav);
   const defaultBreakpoints: SwiperOptions["breakpoints"] = {
-    320: { slidesPerView: 2, spaceBetween: 15 },
+    320: { slidesPerView: 1, spaceBetween: 15 },
     940: { slidesPerView: 3, spaceBetween: 15 },
     1124: { slidesPerView: 4, spaceBetween: 15 },
     1424: { slidesPerView: 5, spaceBetween: 15 },
