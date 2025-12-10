@@ -31,15 +31,48 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "فروشگاه آنلاین",
+    default: "فروشگاه آنلاین | خرید با بهترین قیمت",
     template: "%s | فروشگاه آنلاین",
   },
-  description: "بهترین تجربه خرید اینترنتی با قیمت مناسب",
-  metadataBase: new URL("https://example.com"), // آدرس دامنه اصلی
+  description:
+    "خرید آنلاین محصولات با بهترین قیمت و تخفیف ویژه. موبایل، لوازم خانه، لوازم دکوری و بیشتر.",
+  metadataBase: new URL("https://marlooshop.vercel.app"), // آدرس دامنه اصلی
+  // Faviconها
+  icons: {
+    icon: "/favicon.ico", // همه مرورگرها
+    shortcut: "/favicon-16x16.png", // مرورگرهای قدیمی
+    apple: "/apple-touch-icon.png", // iOS Home Screen
+  },
+  // Robots اصلی
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "fa_IR",
     siteName: "فروشگاه آنلاین",
+    title: {
+      default: "فروشگاه آنلاین | خرید با بهترین قیمت",
+      template: "%s | فروشگاه آنلاین",
+    },
+    description: "خرید آنلاین محصولات با بهترین قیمت و تخفیف ویژه.",
+    images: [
+      {
+        url: "/og-image.jpg", // تصویر OG اصلی (1200x630)
+        width: 1200,
+        height: 630,
+        alt: "فروشگاه آنلاین مارلو شاپ - خرید آنلاین",
+      },
+    ],
+    emails: ["info@marlooshop.com"], // ایمیل تماس
   },
 };
 

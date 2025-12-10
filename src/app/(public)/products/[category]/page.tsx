@@ -11,6 +11,7 @@ import ProductGrid from "@/components/product/ProductGrid";
 import SortBar from "@/components/product/SortBar";
 import Spinners from "@/components/product/Spinner";
 import { isValidSortOption, SortOption } from "@/types/shop";
+import { getCategoryPersian } from "@/utils/UrlParamsdecoded";
 import { Metadata } from "next";
 import Script from "next/script";
 
@@ -35,17 +36,21 @@ export async function generateMetadata({
   params,
   searchParams,
 }: Props): Promise<Metadata> {
-  const { category = "همه محصولات" } = await params;
+  const { category: englishCategory = "همه محصولات" } = await params;
+  const category = await getCategoryPersian(englishCategory); // تبدیل به فارسی
+
   const sp = await searchParams;
 
-  const sort = sp.sort ?? "";
+  const sort = sp.sort ?? "new";
   const page = sp.page ?? "1";
-  const min = sp.minPrice ?? "";
-  const max = sp.maxPrice ?? "";
+  const min = sp.minPrice ?? "0";
+  const max = sp.maxPrice ?? "100000000";
+
+  const hasPriceFilter = Boolean(min || max);
+  const hasNonDefaultSort = sort && sort !== "new";
   const hasOffer = sp.offer === "1";
 
-  const isFiltered = Boolean(min || max || sort || hasOffer);
-
+  const isFiltered = hasPriceFilter || hasNonDefaultSort || hasOffer;
   const title = isFiltered
     ? `فیلتر شده: ${category} | صفحه ${page} | مرتب‌سازی: ${sort || "—"}`
     : `خرید ${category}`;
@@ -58,7 +63,7 @@ export async function generateMetadata({
 
   return {
     title,
-    description: `لیست ${category} با بهترین قیمت و تخفیف ویژه.`,
+    description: ` ${category} با بهترین قیمت و تخفیف ویژه.`,
     robots: isFiltered ? "noindex, follow" : "index, follow",
     alternates: { canonical },
     openGraph: {
@@ -73,7 +78,9 @@ export async function generateMetadata({
 // ShopPage (کاملاً سازگار با Next.js)
 // --------------------------------------
 export default async function ShopPage({ params, searchParams }: Props) {
-  const { category } = await params;
+  const { category: englishCategory } = await params;
+  const persianCategory = await getCategoryPersian(englishCategory); // تبدیل به فارسی
+
   const sp = await searchParams;
 
   const sort = sp.sort ?? "";
@@ -91,7 +98,7 @@ export default async function ShopPage({ params, searchParams }: Props) {
   const offerNum = sp.offer ? parseInt(sp.offer, 10) : undefined;
 
   const { products = [], totalCount = 0 } = await GetProduct({
-    category,
+    category: englishCategory,
     sort: validatedSort,
     page: currentPage,
     minPrice: minPriceNum,
@@ -103,29 +110,35 @@ export default async function ShopPage({ params, searchParams }: Props) {
   const limit = 9;
   const totalPages = Math.ceil(totalCount / limit);
 
+  console.log(products, "product all");
   return (
     <div className="container mx-auto px-4 py-8" dir="rtl">
-      <CurrentPath productId="" cat={category} />
+      <CurrentPath productId="" cat={englishCategory} />
 
-      <h1 className="text-2xl font-bold mb-4">لیست {category}</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        خرید {persianCategory} با بهترین قیمت
+      </h1>
 
       {!products.length && <Spinners />}
 
-      <SortBar selectedSort={validatedSort} selectedCategory={category} />
+      <SortBar
+        selectedSort={validatedSort}
+        selectedCategory={englishCategory}
+      />
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mt-4">
         <FilterSidebar
-          selectedCategory={category}
+          selectedCategory={englishCategory}
           selectedSort={validatedSort}
         />
 
         <div className="col-span-3">
-          <ProductGrid products={products} category={category} />
+          <ProductGrid products={products} category={englishCategory} />
 
           <PaginationBar
             totalPages={totalPages}
             currentPage={currentPage}
-            selectedCategory={category}
+            selectedCategory={englishCategory}
             selectedSort={validatedSort}
           />
         </div>

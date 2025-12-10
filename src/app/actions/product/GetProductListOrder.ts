@@ -1,6 +1,7 @@
 // src\app\actions\product\GetProductListOrder.ts
 "use server";
 import { db as prisma } from '@/app/lib/db'
+import { redis } from '@/lib/redis';
 import { FormattedEasaypostType, FormattedPostType } from '@/types';
 import { format } from 'date-fns';
 
@@ -33,6 +34,24 @@ export async function GetProduct({
 }: GetProductParams) {
   const limit = 9;
   const skip = (page - 1) * limit;
+
+  // 1) ساخت کلید cache
+  const cacheKey = [
+    "products",
+    category || "all",
+    `sort=${sort || "new"}`,
+    `page=${page}`,
+    `min=${minPrice ?? 0}`,
+    `max=${maxPrice ?? 1000000000}`,
+    `count=${count ?? 1}`,
+    `offer=${offer ?? 1}`,
+  ].join(":");
+
+  // 2) تلاش برای خواندن از cache
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    return cached as { products: FormattedEasaypostType[]; totalCount: number };
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: Record<string, any> = {};
@@ -103,23 +122,23 @@ export async function GetProduct({
         skip,
         take: limit,
 
-        include: {  // 👈 روابط حذف شده را اضافه کنید
-          // author: true,
-          // supplier: true,
-          productVariants: {
-            include: {
-              variant: {
-                include: {
-                  model: {
-                    include: {
-                      brand: true,
-                      variants: true
-                    }
-                  }
-                }
-              }
-            }
-          }, productImage: true, categoryList: true, review: true, listProperty: true, colors: true,
+        // فقط فیلدهای مورد نیاز برای FormattedEasaypostType
+        select: {
+          id: true,
+          title: true,
+          price: true,
+          priceOffer: true,
+          priceWithProfit: true,
+          count: true,
+          countproduct: true,
+          content: true,
+          createdAt: true,
+          updatedAt: true,
+          discountEndDate: true,
+          lastUpdatedBySupplier: true,
+          productImage: true, // باید با نوع PHOTO در اسکیمای Prisma سازگار باشد
+          colors: true,       // نوع Colors[]
+          review: true,       // نوع Review[]
         },
       }),
       prisma.product.count({ where }),
@@ -133,7 +152,12 @@ export async function GetProduct({
         ? formatToGregorianDate(product.discountEndDate)
         : null, // باید با Type نهایی (string | null) منطبق باشد.
     }));
-    return { products: formattedListProduct, totalCount };
+    const result = { products: formattedListProduct, totalCount };
+    // 4) ذخیره در cache با TTL (مثلاً ۶۰ ثانیه)
+    await redis.set(cacheKey, result, { ex: 60 * 5 }); // کش به مدت ۵ دقیقه
+
+    return result;
+
   } catch (error) {
     console.error(error, 'خطا در دریافت لیست محصولات');
     throw new Error('خطا در سرور');

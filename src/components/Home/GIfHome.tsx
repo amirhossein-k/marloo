@@ -31,6 +31,7 @@ const GIfHome = () => {
               alt=""
               src={item.pic}
               //   fill
+              unoptimized={true}
               width={600}
               height={600}
               quality={100}

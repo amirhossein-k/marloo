@@ -6,18 +6,18 @@ import { getCategory } from "@/app/actions/product/GetCategory";
 import CategoryLink from "@/components/CategoryLink/CategoryLink";
 
 export const metadata = {
-  title: "همه محصولات",
+  title: "دسته‌بندی همه محصولات | فروشگاه آنلاین",
   description:
-    "لیست همه محصولات با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.",
-  robots: "noindex, follow",
+    "همه دسته‌بندی‌های محصولات شامل موبایل، لوازم خانه، لوازم دکوری و بیشتر. دسته مورد نظر خود را انتخاب کنید و آنلاین خرید کنید.",
+  robots: "index, follow",
   alternates: {
-    canonical: "/products",
+    canonical: "https://marlooshop.vercel.app/products",
   },
   openGraph: {
-    title: "همه محصولات",
+    title: "دسته‌بندی همه محصولات",
     description:
-      "لیست همه محصولات با بهترین قیمت و تخفیف ویژه. جدیدترین محصولات را آنلاین بخرید.",
-    url: "/products",
+      "همه دسته‌بندی‌های محصولات فروشگاه را در یک صفحه ببینید و دسته مورد نظر را انتخاب کنید.",
+    url: "https://marlooshop.vercel.app/products",
   },
 };
 
@@ -35,16 +35,15 @@ export default async function ProductPage() {
   return (
     <div className="p-6" dir="rtl">
       <h1 className="text-2xl font-bold mb-4">همه محصولات</h1>
-      <p className="mb-6 text-gray-600">یک دسته را از لیست زیر انتخاب کنید.</p>
+      <p className="mb-6 text-gray-600">
+        {" "}
+        برای مشاهده محصولات، یک دسته را انتخاب کنید.
+      </p>
 
       {/* 🔵 GRID - ریسپانسیو کامل */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <CategoryLink category={category} />
       </div>
-
-      <p className="mt-8 text-gray-500">
-        برای مشاهده محصولات، یک دسته را انتخاب کنید.
-      </p>
     </div>
   );
 }

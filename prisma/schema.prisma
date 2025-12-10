@@ -255,6 +255,6 @@ model CategotyProduct {
   id               String @id @default(auto()) @map("_id") @db.ObjectId
   titleCategotyEn  String
   titleCategotyPer String
-
-  urlPic String
+  shortDesc        String
+  urlPic           String
 }
