@@ -92,7 +92,7 @@ export default function NavbarButtom() {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 md:-translate-x-32 flex justify-center pb-3 z-50">
+      <div className="fixed bottom-0 left-0 right-0 md:-translate-x-40 flex justify-center pb-3 z-50">
         <div className="bg-black text-gray-400 rounded-3xl px-6 py-2 flex gap-6 items-center shadow-lg">
           {items.map((item) => (
             <button
